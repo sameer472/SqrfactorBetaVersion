@@ -1,0 +1,223 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignupFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:layout_marginStart="10sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginTop="25sp"
+        android:text="Register to Square Factor"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:padding="10sp" />
+
+    <Spinner
+        android:id="@+id/userType"
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:foreground="@drawable/gray_border"
+        android:padding="5sp"
+        android:entries="@array/user_choices"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/registerFristName"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:hint="First Name"
+            android:inputType="text"
+            android:padding="5sp" />
+
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:hint="Last Name"
+            android:inputType="text"
+            android:id="@+id/registerLastName"
+            android:padding="5sp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:id="@+id/registerUserName"
+            android:inputType="text"
+            android:hint="Username"
+            android:padding="5sp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:hint="Your email"
+            android:id="@+id/registerEmail"
+            android:padding="5sp"
+            android:inputType="textEmailAddress"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:foreground="@drawable/gray_border"
+        android:padding="5sp"
+        android:id="@+id/registerUserCountry"
+        android:entries="@array/countries"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:hint="Mobile No."
+            android:id="@+id/registerUserMobileNumber"
+            android:padding="5sp"
+            android:inputType="number"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:id="@+id/registerUserPassword"
+            android:hint="Your Password"
+            android:padding="5sp"
+            android:inputType="textPassword"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="60sp"
+        android:layout_margin="10sp"
+        android:background="@drawable/gray_border"
+        android:padding="5sp"
+        app:hintTextAppearance="@style/TextAppearance.AppCompat.Small">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:hint="Confirm Password"
+            android:id="@+id/registerUserConfirmPassword"
+            android:padding="5sp"
+            android:inputType="textPassword"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/loginbtn"
+        android:text="Complete Registration!"
+        android:textSize="15sp"
+        android:id="@+id/registerCompleteButton"
+        android:textColor="#ffffff"
+        android:layout_margin="10sp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginTop="20sp"
+        android:layout_marginBottom="20sp"
+        android:gravity="center"
+        android:text="OR"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fbcolor"
+        android:text="Login with Facebook"
+        android:id="@+id/loginWithFacebook"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
+        android:layout_margin="10sp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/googlepluscolor"
+        android:text="Login with Google Plus"
+        android:id="@+id/loginWithGooglePlus"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
+        android:layout_margin="10sp"
+        android:layout_gravity="center"/>
+
+</LinearLayout>

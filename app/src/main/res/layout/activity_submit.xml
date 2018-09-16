@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Submit">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/activity_toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10sp"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Young Designers' Award'18"
+                android:textColor="#000"
+                android:layout_marginBottom="10sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:hint="Design Title"
+                android:padding="15sp"
+                android:inputType="text"
+                android:layout_marginBottom="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Design Cover Image"
+                android:layout_marginBottom="10sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="20sp">
+
+                <Button
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/loginbtn"
+                android:text="Use SqrFactor Editor"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginTop="20sp"
+                android:layout_marginBottom="20sp"
+                android:gravity="center"
+                android:text="OR"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/loginbtn"
+                android:text="Upload PDF"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textColor="#ffffff"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SqrFactor Editor"
+                android:layout_marginBottom="5sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:gravity="top"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:inputType="text"
+                android:layout_marginBottom="20sp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10sp"
+                android:paddingStart="10sp"
+                android:paddingRight="10sp"
+                android:paddingEnd="10sp"
+                android:background="@drawable/sqr_factor_btn_color"
+                android:text="Submit"
+                android:textColor="#fff"
+                android:textAllCaps="false"
+                android:layout_marginBottom="20sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

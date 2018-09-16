@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".About">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white">
+
+        <include layout="@layout/activity_toolbar"/>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10sp"
+                    android:text="Personal Info"
+                    android:textColor="#000"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textSize="16sp"
+                    android:background="@drawable/gray_border"/>
+
+                <TextView
+                    android:id="@+id/about_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Keanu Reeves"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="15sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Followers:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_followers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Following:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/Following"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="21"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginBottom="10sp"/>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10sp"
+                    android:text="Basic Details"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:background="@drawable/gray_border"/>
+
+                <TextView
+                    android:id="@+id/about_nameofCompany"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name of the Company/Firm:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_nameofCompany_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hackerkernel"
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile Number:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_mobile_number_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="9876543210"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email Address:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_email_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="hello@hackerkernel.com"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Country:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_country_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="India"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="State:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_state_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Karnataka"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="City:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_city_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bangalore"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_shot_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Short Bio:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_shot_bio_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_company_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Firm/Company:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_company_type_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Private Limited Company"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+                <TextView
+                    android:id="@+id/about_company_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Firm/Company Name:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_company_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SqrFactor India Pvt. Ltd."
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_company_register_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Firm/Company Registration Number:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_company_register_num_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_facebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Facebook Link:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_facebook_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+                <TextView
+                    android:id="@+id/about_twitter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Twitter Link:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_twitter_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+                <TextView
+                    android:id="@+id/about_linkedin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Linkedin Link:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_linkedin_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+                <TextView
+                    android:id="@+id/about_instagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Instagram Link:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_instagram_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10sp"
+                    android:text="Company Firm Details"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:background="@drawable/gray_border"/>
+
+                <TextView
+                    android:id="@+id/about_year_service"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Years in Service:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_year_service_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_firm_size"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Firm Size:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_firm_size_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="11-50"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_service_offered"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Service Offered:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_service_offered_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_asset"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Asset Served:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_asset_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_city_served"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="City Served"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_city_served_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bangalore"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_award_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Award Name"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_award_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_project_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Project Name"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_project_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10sp"
+                    android:text="Employee/Member Details"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:background="@drawable/gray_border"/>
+
+                <TextView
+                    android:id="@+id/about_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="First Name:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_first_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:fontFamily="@font/roboto"
+                    android:textSize="12sp"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp" />
+
+                <TextView
+                    android:id="@+id/about_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Last Name:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_last_name_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_role"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Role:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_role_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Phone Number:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_phone_number_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_aadhaar_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Aadhaar Id:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_aadhaar_id_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_employee_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Email Address"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp" />
+
+                <TextView
+                    android:id="@+id/about_employee_email_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_employee_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Country:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_employee_country_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="India"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_employee_state"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="State:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_employee_state_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Karnataka"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"/>
+                <TextView
+                    android:id="@+id/about_employee_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="City:"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="#000"
+                    android:textSize="12sp"
+                    android:padding="10sp"/>
+
+                <TextView
+                    android:id="@+id/about_employee_city_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bangalore"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/roboto"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginBottom="10sp"/>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>

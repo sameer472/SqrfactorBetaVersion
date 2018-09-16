@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Launch2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/activity_toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15sp"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Competition Type"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:foreground="@drawable/gray_border"
+                android:padding="10sp"
+                android:entries="@array/competitions"
+                android:layout_marginBottom="10sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Partners"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10sp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Partner"
+                    android:layout_marginRight="5sp"
+                    android:layout_marginEnd="5sp"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Will update later"/>
+
+            </RadioGroup>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:gravity="center_vertical"
+                android:background="@drawable/gray_border"
+                android:hint="Name"
+                android:padding="15sp"
+                android:inputType="text"
+                android:layout_marginBottom="10sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:gravity="center_vertical"
+                android:background="@drawable/gray_border"
+                android:hint="Website"
+                android:padding="15sp"
+                android:inputType="text"
+                android:layout_marginBottom="10sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:gravity="center_vertical"
+                android:background="@drawable/gray_border"
+                android:hint="Email address"
+                android:padding="15sp"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="10sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:gravity="center_vertical"
+                android:background="@drawable/gray_border"
+                android:hint="Contact No."
+                android:padding="15sp"
+                android:inputType="number"
+                android:layout_marginBottom="10sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add more+"
+                android:layout_marginBottom="10sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attach documents"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Attach more documents"
+                android:layout_marginBottom="10sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="15sp"
+                android:weightSum="2"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/backbtn"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15sp"
+                    android:layout_marginEnd="15sp"
+                    android:background="@drawable/sqr_factor_btn_color"
+                    android:text="Back"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/submitbtn"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/sqr_factor_btn_color"
+                    android:text="Submit"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

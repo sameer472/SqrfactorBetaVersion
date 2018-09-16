@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CompetitionsActivity">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/activity_toolbar"/>
+
+            <!--Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="20sp"
+                android:background="@drawable/sqr_factor_btn_color"
+                android:text="Launch Competition"
+                android:textColor="#fff"
+                android:layout_margin="20sp"
+                android:textAllCaps="false"
+                android:textSize="15sp"/-->
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20sp"
+                android:padding="10sp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="5"
+                        android:padding="10sp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="4">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Young Designers' Award'18"
+                                android:textColor="#000"
+                                android:textStyle="bold"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6 months ago"/>
+
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="0sp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:src="@drawable/ellipsis"
+                            android:padding="5sp"/>
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/henry"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="10sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last Date of Submission: 30/12/18"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="2sp"
+                        android:layout_marginLeft="10sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Last Date of Registration: 30/12/18"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="2sp"
+                        android:layout_marginLeft="10sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Prizes: Not applicable"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="2sp"
+                        android:layout_marginLeft="10sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Type: free"
+                        android:textColor="@color/gray"
+                        android:layout_marginTop="2sp"
+                        android:layout_marginLeft="10sp"/>
+
+                    <Button
+                        android:id="@+id/participate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20sp"
+                        android:layout_marginStart="20sp"
+                        android:layout_marginTop="50sp"
+                        android:paddingLeft="10sp"
+                        android:paddingStart="10sp"
+                        android:paddingRight="10sp"
+                        android:paddingEnd="10sp"
+                        android:background="@drawable/sqr_factor_btn_color"
+                        android:text="Participate"
+                        android:textColor="#fff"
+                        android:textAllCaps="false"
+                        android:layout_marginBottom="20sp"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="10sp"
+        app:backgroundTint="@color/sqr"
+        android:src="@drawable/ic_add_black_24dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:rippleColor="#fff"/>
+
+</android.support.design.widget.CoordinatorLayout>

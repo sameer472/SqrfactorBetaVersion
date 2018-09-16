@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostEvent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/activity_toolbar"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="15sp"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cover Image"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/gray_border"
+                android:padding="10sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10sp"
+                app:hintTextAppearance="@color/colorAccent">
+
+                <EditText
+                    android:id="@+id/attach"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:hint="Attachment"
+                    android:padding="5sp"
+                    android:inputType="text"
+                    android:drawableRight="@drawable/ic_attach_file_black_24dp"
+                    android:drawableEnd="@drawable/ic_attach_file_black_24dp"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event Title"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/gray_border"
+                android:padding="10sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10sp"
+                app:hintTextAppearance="@color/colorAccent">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:hint="Event Title"
+                    android:padding="5sp"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="200sp"
+                android:gravity="top"
+                android:background="@drawable/gray_border"
+                android:hint="@string/event_desc"
+                android:padding="15sp"
+                android:inputType="text"
+                android:layout_marginBottom="10sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Venue"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:background="@drawable/gray_border"
+                android:padding="10sp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10sp"
+                app:hintTextAppearance="@color/colorAccent">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@android:color/transparent"
+                    android:hint="Venue Address"
+                    android:padding="5sp"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Image"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:id="@+id/image"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/add_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add more+"
+                android:layout_marginBottom="10sp"/>
+
+            <LinearLayout
+                android:id="@+id/more_img1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:id="@+id/img1"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/more_img2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:id="@+id/img2"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/more_img3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/gray_border"
+                android:padding="15sp"
+                android:orientation="horizontal"
+                android:weightSum="5"
+                android:layout_marginBottom="5sp">
+
+                <Button
+                    android:id="@+id/img3"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:text="Choose File"
+                    android:textAllCaps="false"
+                    android:layout_weight="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No file chosen"
+                    android:textColor="#000"
+                    android:layout_weight="2"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_attach_file_black_24dp"
+                    android:layout_gravity="end|center_vertical"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#000"
+                android:layout_marginBottom="5sp"/>
+
+            <Spinner
+                android:id="@+id/country_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:foreground="@drawable/gray_border"
+                android:padding="10sp"
+                android:layout_marginBottom="10sp"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:foreground="@drawable/gray_border"
+                android:padding="10sp"
+                android:entries="@array/countries"
+                android:layout_marginBottom="10sp"/>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:foreground="@drawable/gray_border"
+                android:padding="10sp"
+                android:entries="@array/countries"
+                android:layout_marginBottom="10sp"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:background="@drawable/sqr_factor_btn_color"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textColor="#ffffff"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

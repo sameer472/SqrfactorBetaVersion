@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20sp"
+        app:cardElevation="1sp"
+        app:cardBackgroundColor="#e6ecf5"
+        android:layout_marginBottom="2sp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:orientation="horizontal"
+                android:weightSum="5">
+
+                <ImageView
+                    android:layout_width="0sp"
+                    android:layout_height="60sp"
+                    android:src="@drawable/henry"
+                    android:layout_weight="1"
+                    android:id="@+id/commenterProfileImage"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginLeft="10sp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="4"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10sp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Henry H"
+                        android:id="@+id/commenterUserName"
+                        android:textSize="15sp"
+                        android:textStyle="bold"
+                        android:textColor="#000"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5 minutes ago"
+                        android:id="@+id/timeAgo"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nice work there!"
+                android:id="@+id/commentBody"
+                android:textStyle="bold"
+                android:paddingLeft="20sp"/>
+
+            <Button
+                android:layout_width="100sp"
+                android:layout_height="50sp"
+                android:text="Like"
+                android:textAllCaps="false"
+                android:id="@+id/commentLike"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/like_small"
+                android:background="@android:color/transparent"
+                android:paddingLeft="20sp"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>

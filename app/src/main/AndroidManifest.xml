@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.hackerkernel.user.sqrfactor">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@drawable/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".LoginScreen" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".HomeScreen"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".Index">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".RedActivity"
+            android:label="What&apos;s Red?"
+            android:parentActivityName=".HomeScreen" />
+        <activity android:name=".ToolbarActivity" />
+        <activity android:name=".Profile" />
+        <activity android:name=".Credits" />
+        <activity android:name=".Settings" />
+        <activity android:name=".ProfessionalActivity" />
+        <activity android:name=".OtherDetailsActivity" />
+        <activity android:name=".EducationDetailsActivity" />
+        <activity android:name=".BasicDetails" />
+        <activity
+            android:name=".DesignActivity"
+            android:label="Post Design"
+            android:parentActivityName=".HomeScreen"
+            tools:ignore="DuplicateActivity" />
+        <activity
+            android:name=".ArticleActivity"
+            android:label="Post Article"
+            android:parentActivityName=".HomeScreen" />
+        <activity
+            android:name=".ResetPassword"
+            android:label="Reset Password"
+            android:parentActivityName=".LoginScreen" />
+        <activity
+            android:name=".ProfileActivity"
+            android:label="Profile"
+            android:parentActivityName=".HomeScreen" />
+        <activity
+            android:name=".CommentsPage"
+            android:label="Comments"
+            android:parentActivityName=".HomeScreen" />
+        <activity
+            android:name=".CompetitionsActivity"
+            android:label="Competitions"
+            android:parentActivityName=".HomeScreen" />
+        <!-- <activity -->
+        <!-- android:name=".NotificationsActivity" -->
+        <!-- android:label="Notifications" -->
+        <!-- android:parentActivityName=".HomeScreen" /> -->
+        <activity
+            android:name=".JobActivity"
+            android:label="Jobs/Internships"
+            android:parentActivityName=".HomeScreen" />
+        <activity
+            android:name=".EventsActivity"
+            android:label="Events"
+            android:parentActivityName=".HomeScreen" />
+        <activity
+            android:name=".PostEvent"
+            android:label="Post Event"
+            android:parentActivityName=".EventsActivity" />
+        <activity
+            android:name=".PostJob"
+            android:label="Post Job"
+            android:parentActivityName=".JobActivity" />
+        <activity
+            android:name=".LaunchCompetition"
+            android:label="Launch a Competition"
+            android:parentActivityName=".CompetitionsActivity" />
+        <activity
+            android:name=".Launch2"
+            android:label="Launch a Competition"
+            android:parentActivityName=".LaunchCompetition" />
+        <activity
+            android:name=".Participate"
+            android:label="Participate"
+            android:parentActivityName=".CompetitionsActivity" />
+        <activity
+            android:name=".Submit"
+            android:label="Submit"
+            android:parentActivityName=".Participate" />
+        <activity
+            android:name=".JobDetails"
+            android:label="Job Details"
+            android:parentActivityName=".JobActivity" />
+        <activity
+            android:name=".EventDetails"
+            android:label="Event Details"
+            android:parentActivityName=".EventsActivity" />
+        <activity
+            android:name=".About"
+            android:label="About"
+            android:parentActivityName=".ProfileActivity" />
+        <activity android:name=".EditProfile" />
+        <activity
+            android:name=".FollowersActivity"
+            android:label="Followers" />
+        <activity
+            android:name=".BlueprintActivity"
+            android:label="Blueprints" />
+        <activity
+            android:name=".PortfolioActivity"
+            android:label="Portfolios" />
+        <activity
+            android:name=".FollowingActivity"
+            android:label="Following" />
+        <activity android:name=".ChatWithAFriendActivity" />
+        <activity android:name=".UserProfileActivity" />
+        <activity android:name=".TopContributors" />
+        <activity android:name=".CompanyFirmDetails" />
+        <activity android:name=".EmployeeMemberDetails" />
+        <activity android:name=".ChangePassword" />
+        <activity android:name=".BasicFirmDetails" />
+        <activity android:name=".CollegeBasicDetails" />
+        <activity android:name=".CollegeDetails" />
+        <activity android:name=".PostActivity" />
+        <activity android:name=".ImageActivity" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity android:name=".Design2Activity" />
+        <activity android:name=".FullPostActivity" />
+        <activity android:name=".LikeListActivity" />
+
+        <activity android:name=".StatusPostActivity"></activity>
+        <service android:name=".NotificationCountService">
+
+        </service>
+    </application>
+
+</manifest>

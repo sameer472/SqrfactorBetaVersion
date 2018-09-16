@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/White"
+    tools:context=".Credits">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/credits_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/sqr"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_credits"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="2dp">
+
+            <include layout="@layout/common_profile_section"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:fontFamily="@font/roboto_medium"
+            android:textSize="15sp"
+            android:text="You haven't posted any articles yet. Go ahead and create some amazing articles!" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To know more, read "
+            android:fontFamily="@font/roboto"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="faqs"
+            android:fontFamily="@font/roboto"
+            android:textColor="@color/sqr"/>
+
+    </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                android:gravity="center_vertical"
+                android:id="@+id/headingLayout"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp">
+
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:text="Article"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/gray_border"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:text="Total Views"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/gray_border"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:layout_width="20sp"
+                    android:layout_height="match_parent"
+                    android:text="1st Week views"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/gray_border"
+                    android:padding="5dp"/>
+
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:text="Credits"
+                    android:textSize="15sp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/sqr"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/gray_border"
+                    android:padding="5dp"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/recyclerView_credit"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp">
+
+            </android.support.v7.widget.RecyclerView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginBottom="5sp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/prevPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prev"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/White"
+                    android:textAllCaps="false"
+                    android:background="@drawable/backgroundbutton"/>
+                <Button
+                    android:id="@+id/nextPage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5sp"
+                    android:text="Next"
+                    android:fontFamily="@font/roboto_medium"
+                    android:textColor="@color/White"
+                    android:textAllCaps="false"
+                    android:background="@drawable/backgroundbutton"
+                    android:layout_marginLeft="5sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
