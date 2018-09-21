@@ -45,9 +45,14 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3"
+            android:layout_width="28dp"
+            android:layout_height="24dp"
+            android:padding="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="33"
+            android:visibility="gone"
+            android:textColor="@color/white"
+            android:background="@drawable/redbg"
             android:id="@+id/unreadCount"
             />
         <ImageView

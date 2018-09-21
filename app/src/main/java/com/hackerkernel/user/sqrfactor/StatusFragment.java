@@ -229,7 +229,7 @@ public class StatusFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                HomeScreen.getnotificationCount();
+                HomeScreen.getUnReadMsgCount();
 
             }
             @Override

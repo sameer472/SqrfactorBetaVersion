@@ -1,6 +1,7 @@
 package com.hackerkernel.user.sqrfactor;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class ChatWithAFriendActivityAdapter extends RecyclerView.Adapter<ChatWithAFriendActivityAdapter.MyViewHolder> {
 
@@ -53,7 +57,10 @@ public class ChatWithAFriendActivityAdapter extends RecyclerView.Adapter<ChatWit
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-
+        SharedPreferences mPrefs =context.getSharedPreferences("User",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("MyObject", "");
+        UserClass userClass = gson.fromJson(json, UserClass.class);
         MessageClass messageClass=messageClassArrayList.get(position);
         int fromId=messageClass.getUserFrom();
 
@@ -98,8 +105,8 @@ public class ChatWithAFriendActivityAdapter extends RecyclerView.Adapter<ChatWit
             holder.myLayout.setVisibility(View.VISIBLE);
             holder.myMessage.setText(messageClassArrayList.get(position).getChat());
             holder.myChatTime.setText(days+" Days ago");
-            holder.myName.setText(MessageFragment.userName);
-            Glide.with(context).load("https://archsqr.in/"+MessageFragment.userProfile)
+            holder.myName.setText(userClass.getUser_name());
+            Glide.with(context).load("https://archsqr.in/"+userClass.getProfile())
                     .into(holder.myProfile);
 
         }

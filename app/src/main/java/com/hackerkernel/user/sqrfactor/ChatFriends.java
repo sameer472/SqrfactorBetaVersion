@@ -8,14 +8,101 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class ChatFriends implements Serializable {
-    public String userName,userProfile;
-    public int userID;
+    public String userName,userProfile,name,first_name,last_name;
+    public int userID,unread_count;
     public transient JSONObject jsonObject=null;
     public String isOnline;
     public String lastSeen;
-    public String name;
+    public String chat,status,created_at;
+
+
+
+    public ChatFriends() {
+
+    }
+    public ChatFriends(String userName, String userProfile, int userID) {
+        this.userProfile = userProfile;
+        this.userName = userName;
+        this.userID = userID;
+
+    }
+
+    public ChatFriends(JSONObject jsonObject) {
+        this.jsonObject = jsonObject;
+
+        try {
+
+            JSONObject friend_detail=jsonObject.getJSONObject("friend_detail");
+            this.userID = friend_detail.getInt("id");
+            this.userName = friend_detail.getString("first_name") +" "+friend_detail.getString("last_name");
+            this.name=friend_detail.getString("name");
+            this.userProfile = friend_detail.getString("profile");
+
+            JSONObject last_message=jsonObject.getJSONObject("last_message");
+            this.chat=last_message.getString("chat");
+            this.status=last_message.getString("status");
+            this.created_at=last_message.getString("created_at");
+
+            this.unread_count=jsonObject.getInt("unread_count");
+
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
     public String getLastSeen() {
         return lastSeen;
+    }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public int getUnread_count() {
+        return unread_count;
+    }
+
+    public void setUnread_count(int unread_count) {
+        this.unread_count = unread_count;
+    }
+
+    public String getChat() {
+        return chat;
+    }
+
+    public void setChat(String chat) {
+        this.chat = chat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public void setLastSeen(String lastSeen) {
@@ -37,35 +124,6 @@ public class ChatFriends implements Serializable {
     public void setIsOnline(String isOnline) {
         this.isOnline = isOnline;
     }
-
-    public ChatFriends() {
-
-    }
-    public ChatFriends(String userName, String userProfile, int userID) {
-        this.userProfile = userProfile;
-        this.userName = userName;
-        this.userID = userID;
-
-    }
-
-    public ChatFriends(JSONObject jsonObject) {
-        this.jsonObject = jsonObject;
-
-        try {
-
-            this.userID = jsonObject.getInt("id");
-            this.userName = jsonObject.getString("first_name") +" "+jsonObject.getString("last_name");
-            this.name=jsonObject.getString("name");
-            this.userProfile = jsonObject.getString("profile");
-
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
     public String getUserName() {
         return userName;

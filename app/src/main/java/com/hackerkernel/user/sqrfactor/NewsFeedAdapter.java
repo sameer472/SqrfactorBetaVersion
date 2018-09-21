@@ -146,6 +146,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     Intent intent=new Intent(context,UserProfileActivity.class);
                     intent.putExtra("User_id",newsFeedStatus.getUserId());
                     intent.putExtra("ProfileUserName",newsFeedStatus.getUser_name_of_post());
+                    intent.putExtra("FriendName",newsFeedStatus.getAuthImageUrl());
                     context.startActivity(intent);
                 }
 

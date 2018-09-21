@@ -33,6 +33,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +54,7 @@ public class MessageFragment extends Fragment {
     public static  int userId;
     public static FirebaseDatabase database;
     public static DatabaseReference ref;
+    UserClass userClass;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -77,67 +80,13 @@ public class MessageFragment extends Fragment {
         SharedPreferences mPrefs =getActivity().getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("MyObject", "");
-        final UserClass userClass = gson.fromJson(json, UserClass.class);
+         userClass = gson.fromJson(json, UserClass.class);
         //String token_id=FirebaseInstanceId.getInstance().getToken();
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+
 
         if(savedInstanceState==null)
         {
-            StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/message/"+userClass.getUserId(),
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.v("ReponseFeed", response);
-                            //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                //JSONObject user=jsonObject.getJSONObject("user");
-
-                                //CurrentLoginedUser currentLoginedUser=new CurrentLoginedUser(userId,userName,userProfile);
-                                userProfile=userClass.getProfile();//user.getString("profile");
-                                userName=userClass.getName();//user.getString("name");
-                                userId=userClass.getUserId();//user.getInt("id");
-
-                                JSONArray jsonArrayData = jsonObject.getJSONArray("friends");
-                                for (int i = 0; i < jsonArrayData.length(); i++) {
-                                    Log.v("Response",response);
-                                    ChatFriends chatFriends1 = new ChatFriends(jsonArrayData.getJSONObject(i));
-                                    chatFriends1.setIsOnline("False");
-                                    chatFriends.add(chatFriends1);
-                                }
-                                chatAdapter.notifyDataSetChanged();
-//
-                                StatusLinstner();
-
-
-
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    },
-                    new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }) {
-
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("Accept", "application/json");
-                    params.put("Authorization", "Bearer "+TokenClass.Token);
-                    return params;
-                }
-
-            };
-
-            requestQueue.add(myReq);
+           getAllFriendsList();
         }
 
         else {
@@ -154,6 +103,31 @@ public class MessageFragment extends Fragment {
 
                 HomeScreen.getnotificationCount();
 
+
+
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Toast.makeText(getContext(), "chat Listing", Toast.LENGTH_SHORT).show();
+                LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
+                int index=getIndexByProperty(lastMessage.getSenderId());
+                getAllFriendsList();
+
+//                ChatFriends chatFriend=chatFriends.get(index);
+//                //chatFriend.se
+//                chatFriends.set(index, newValue);
+//                chatAdapter.notifyItemChanged(index);
+               // HomeScreen.getUnReadMsgCount();
+
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -163,6 +137,84 @@ public class MessageFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void getAllFriendsList() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/message/"+userClass.getUserId(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("chatfriend1", response);
+                        Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            //JSONObject user=jsonObject.getJSONObject("user");
+
+                            //CurrentLoginedUser currentLoginedUser=new CurrentLoginedUser(userId,userName,userProfile);
+//                            userProfile=userClass.getProfile();//user.getString("profile");
+//                            userName=userClass.getName();//user.getString("name");
+//                            userId=userClass.getUserId();//user.getInt("id");
+
+                            JSONArray jsonArrayData = jsonObject.getJSONArray("friends");
+                            if (chatFriends!=null)
+                            {
+                                chatFriends.clear();
+                            }
+                            for (int i = 0; i < jsonArrayData.length(); i++) {
+                                Log.v("Response",response);
+                                ChatFriends chatFriends1 = new ChatFriends(jsonArrayData.getJSONObject(i));
+                                chatFriends1.setIsOnline("False");
+                                chatFriends.add(chatFriends1);
+                            }
+                            Collections.sort(chatFriends, new Comparator<ChatFriends>(){
+                                public int compare(ChatFriends o1, ChatFriends o2){
+                                    return o2.getCreated_at().compareTo(o1.getCreated_at());
+                                }
+                            });
+                            chatAdapter.notifyDataSetChanged();
+//
+                            StatusLinstner();
+
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer "+TokenClass.Token);
+                return params;
+            }
+
+        };
+
+        requestQueue.add(myReq);
+    }
+
+    private int getIndexByProperty(int userId) {
+        for (int i = 0; i < chatFriends.size(); i++) {
+            if (chatFriends.get(i) !=null && chatFriends.get(i).getUserID()==userId) {
+                return i;
+            }
+        }
+        return -1;// not there is list
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {

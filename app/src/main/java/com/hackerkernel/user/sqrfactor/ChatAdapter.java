@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         ChatFriends chatFriend = chatFriends.get(position);
 
+
+
         //if(chatFriend.getUserName().equals())
 
         //Log.v("DATattatatata",chatFriend.getName()+" "+chatFriend.getUserName());
@@ -52,7 +55,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         }
         Glide.with(context).load("https://archsqr.in/"+chatFriend.getUserProfile())
                 .into(holder.frndProfile);
-        holder.chatMessage.setText("hello");
+        holder.chatMessage.setText(chatFriend.getChat());
+
+
+        if(chatFriend.getUnread_count()!=0)
+        {
+            Log.v("count",chatFriend.getUnread_count()+"");
+            holder.unreadCount.setText(chatFriend.getUnread_count()+"");
+            holder.unreadCount.setVisibility(View.VISIBLE);
+        }
+
+
+
         if(chatFriend.getIsOnline().equals("True"))
         {
             holder.online.setVisibility(View.VISIBLE);

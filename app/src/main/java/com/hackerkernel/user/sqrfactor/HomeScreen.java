@@ -200,9 +200,14 @@ public class HomeScreen extends ToolbarActivity {
                         break;
 
                     case 1:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.mainfrag, new MessageFragment()).commit();
                         tab.setIcon(R.drawable.chatmsgcolor);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.mainfrag, new MessageFragment()).commit();
 
+                        if(tab.getCustomView()!=null)
+                            v = tab.getCustomView().findViewById(R.id.badgeCotainer);
+                        if(v != null) {
+                            v.setVisibility(View.GONE);
+                        }
                         break;
 
                     case 2:
@@ -529,7 +534,7 @@ public class HomeScreen extends ToolbarActivity {
                         try {
 
                             JSONObject jsonObject = new JSONObject(response);
-                            count1 =jsonObject.getInt("count");
+                            count1 =jsonObject.getInt("Unread Messages");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

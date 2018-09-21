@@ -2,6 +2,7 @@ package com.hackerkernel.user.sqrfactor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,6 +69,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
     private ImageView bottom_arrow;
     private String isOnline;
     private  String nextPageUrl;
+    private UserClass userClass;
 
 
 
@@ -81,6 +84,11 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
         context = getApplicationContext();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final SharedPreferences mPrefs = getSharedPreferences("User", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("MyObject", "");
+        userClass = gson.fromJson(json, UserClass.class);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -246,8 +254,15 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //
                 SendMessageToServer();
-                LastMessage lastMessage = new LastMessage(MessageFragment.userId, messageToSend.getText().toString(), MessageFragment.userName);
-                MessageFragment.ref.child("Chats").child(id + "").setValue(lastMessage);
+                final LastMessage lastMessage = new LastMessage(userClass.getUserId(), messageToSend.getText().toString(), userClass.getUser_name());
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        MessageFragment.ref.child("Chats").child(id + "").setValue(lastMessage);
+                    }
+                }, 1000);
+
                 Toast.makeText(ChatWithAFriendActivity.this, "Messeage sent..", Toast.LENGTH_LONG).show();
             }
         });
@@ -342,7 +357,6 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
 
                     LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
-                    Toast.makeText(getApplicationContext(),lastMessage.getMessage()+"  "+lastMessage.getSenderId(),Toast.LENGTH_LONG).show();
                     if(lastMessage!=null && id==lastMessage.getSenderId())
                     {
 
@@ -368,7 +382,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
 
 
-                        Toast.makeText(ChatWithAFriendActivity.this,"MessageFromServer"+lastMessage.getMessage(),Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(ChatWithAFriendActivity.this,"MessageFromServer"+lastMessage.getMessage(),Toast.LENGTH_LONG).show();
                     }
 
                 }
