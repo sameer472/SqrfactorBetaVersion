@@ -5,7 +5,7 @@ import org.json.JSONObject;
 
 public class LikeClass {
 
-    private String name,first_name,last_name,user_name,profile_url;
+    private String name,first_name,last_name,user_name,profile_url,isFollowing;
     private int id;
     private JSONObject jsonObject;
 
@@ -20,17 +20,28 @@ public class LikeClass {
     }
 
 
+    public String getIsFollowing() {
+        return isFollowing;
+    }
+
+    public void setIsFollowing(String isFollowing) {
+        this.isFollowing = isFollowing;
+    }
+
     public LikeClass(JSONObject jsonObject) {
         this.jsonObject = jsonObject;
 
 
         try {
-            this.id = jsonObject.getInt("id");
-            this.name = jsonObject.getString("name");
-            this.first_name = jsonObject.getString("first_name");
-            this.last_name = jsonObject.getString("last_name");
-            this.user_name = jsonObject.getString("user_name");
-            this.profile_url = jsonObject.getString("profile");
+
+            isFollowing=jsonObject.getString("isfollowing");
+            JSONObject user= jsonObject.getJSONObject("user");
+            this.id = user.getInt("id");
+            this.name = user.getString("name");
+            this.first_name = user.getString("first_name");
+            this.last_name = user.getString("last_name");
+            this.user_name = user.getString("user_name");
+            this.profile_url = user.getString("profile");
 
 
         } catch (JSONException e) {

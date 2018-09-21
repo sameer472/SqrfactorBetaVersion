@@ -43,6 +43,13 @@
                 android:text="Have you watched The Matrix?"
                 android:textColor="#000"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:id="@+id/unreadCount"
+            />
         <ImageView
             android:layout_width="24dp"
             android:layout_marginLeft="30dp"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -18,6 +19,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -35,12 +39,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -61,7 +76,9 @@ public class StatusPostActivity extends AppCompatActivity {
     int currentItems,totalItems,scrolledItems;
     private ProgressBar progressBar;
     TextView btnSubmit;
+    private boolean isEdit=false;
     EditText writePost;
+    FrameLayout frameLayout;
     private ProgressDialog pDialog;
     public static String UPLOAD_URL = "https://archsqr.in/api/post";
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -71,6 +88,8 @@ public class StatusPostActivity extends AppCompatActivity {
     private NewsFeedAdapter newsFeedAdapter;
     private ProgressDialog dialog = null;
     private JSONObject jsonObject;
+    private String slug;
+    private int postId;
     private Toolbar toolbar;
 
     @Override
@@ -99,9 +118,19 @@ public class StatusPostActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Uploading Image...");
         dialog.setCancelable(false);
-        final FrameLayout frameLayout = findViewById(R.id.rl);
+        frameLayout = findViewById(R.id.rl);
         frameLayout.setVisibility(View.GONE);
         jsonObject = new JSONObject();
+
+        Intent intent=getIntent();
+        if(intent!=null)
+        {
+            Toast.makeText(this,intent.getStringExtra("Post_Slug_ID"),Toast.LENGTH_LONG).show();
+            isEdit=true;
+            postId=intent.getIntExtra("Post_ID",0);
+            slug=intent.getStringExtra("Post_Slug_ID");
+            FetchDataFromServerAndBindToViews(intent.getStringExtra("Post_Slug_ID"));
+        }
 
 
         mRemoveButton = findViewById(R.id.ib_remove);
@@ -135,7 +164,14 @@ public class StatusPostActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImage();
+                if(isEdit)
+                {
+                    uploadEditedStatusToServer();
+                }
+                else {
+                    uploadImage(); 
+                }
+                
             }
         });
 
@@ -149,6 +185,66 @@ public class StatusPostActivity extends AppCompatActivity {
         }
 
     }
+
+    private void uploadEditedStatusToServer() {
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getApplicationContext());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://archsqr.in/api/status/edit-status",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        writePost.setText("");
+                        displayImage.setVisibility(View.GONE);
+                        mRemoveButton.setVisibility(View.GONE);
+
+//                        //Showing toast message of the response
+                        Log.v("response",s);
+                        Toast.makeText(getApplicationContext(), "response"+s , Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+                        Log.v("response",volleyError.toString());
+                        Toast.makeText(getApplicationContext(), "response"+volleyError.toString() , Toast.LENGTH_LONG).show();
+                        //Showing toast
+                        // Toast.makeText(getActivity(), volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer " +TokenClass.Token);
+
+                return params;
+            }
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String,String> params = new HashMap<>();
+                String image = getStringImage(bitmap);
+
+                 Log.v("data",slug+" "+writePost.getText().toString()+" "+image);
+                params.put("image","data:image/jpeg;base64,"+image);
+                params.put("post_slug",slug);
+                params.put("description",writePost.getText().toString().trim());
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
     private void requestPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, WRITE_EXTERNAL_STORAGE)) {
 
@@ -214,7 +310,7 @@ public class StatusPostActivity extends AppCompatActivity {
                 Map<String,String> params = new HashMap<>();
                 String image = getStringImage(bitmap);
 
-                Log.v("ImageUrl","data:image/jpeg;base64,"+image);
+               // Log.v("ImageUrl","data:image/jpeg;base64,"+image);
                 params.put("image_value","data:image/jpeg;base64,"+image);
                 params.put("description",writePost.getText().toString().trim());
 
@@ -258,4 +354,69 @@ public class StatusPostActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_from_top,R.anim.slide_in_top);
 
     }
+
+    private void FetchDataFromServerAndBindToViews(String post_slug_id) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        // "https://archsqr.in/api/profile/detail/
+        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/status/edit/"+post_slug_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("StatusPost",response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonObjectFullPost = jsonObject.getJSONObject("statusPostEdit");
+                            final ArticleEditClass statusPostEdit = new ArticleEditClass(jsonObjectFullPost);
+                            writePost.setText(statusPostEdit.getDescription());
+                            Log.v("url","https://archsqr.in/"+statusPostEdit.getImage());
+                            displayImage.setVisibility(View.VISIBLE);
+                            frameLayout.setVisibility(View.VISIBLE);
+                            mRemoveButton.setVisibility(View.VISIBLE);
+//                            Glide.with(getApplicationContext()).load("https://archsqr.in/"+statusPostEdit.getImage())
+//                                    .into(displayImage);
+
+
+                            Glide.with(getApplicationContext())
+                                    .asBitmap()
+                                    .load("https://archsqr.in/"+statusPostEdit.getImage())
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                            Bitmap bitmapResized = Bitmap.createScaledBitmap(resource,
+                                                    (int) (resource.getWidth() * 0.5), (int) (resource.getHeight() * 0.5), false);
+                                           // imageString=getStringImage(resource);
+                                            displayImage.setImageBitmap(bitmapResized);
+                                            bitmap=bitmapResized;
+                                        }
+                                    });
+//                            displayImage.invalidate();
+//                            BitmapDrawable drawable = (BitmapDrawable) displayImage.getDrawable();
+//                            bitmap= drawable.getBitmap();
+                            } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer " + TokenClass.Token);
+                return params;
+            }
+
+        };
+        requestQueue.add(myReq);
+    }
+
 }

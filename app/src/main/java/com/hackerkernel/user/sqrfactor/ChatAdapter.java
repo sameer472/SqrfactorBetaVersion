@@ -74,7 +74,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         ImageView frndProfile,online;
-        TextView frndName,chatMessage;
+        TextView frndName,chatMessage,unreadCount;
 
 
 
@@ -99,6 +99,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 }
             });
             frndProfile =(ImageView)itemView.findViewById(R.id.chat_frnd_profile);
+            unreadCount=(TextView)itemView.findViewById(R.id.unreadCount);
             frndName =(TextView) itemView.findViewById(R.id.chat_frnd_name);
             chatMessage =(TextView)itemView.findViewById(R.id.chat_last_message);
             online=(ImageView) itemView.findViewById(R.id.onlineicon);

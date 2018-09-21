@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,25 +37,45 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.irshulx.Editor;
 import com.github.irshulx.EditorListener;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class DesignActivity extends ToolbarActivity {
+public class DesignActivity extends ToolbarActivity implements PlaceSelectionListener {
 
     private Uri uri;
-    Toolbar toolbar;
+    private int designId;
+    private Toolbar toolbar;
+   private ArticleEditClass designEditClass;
+   private SecondPageDesignData secondPageDesignData;
+    private PlaceAutocompleteFragment autocompleteFragment;
     private ImageView profileImage;
     private TextView profileName;
     private Editor editor;
@@ -62,6 +83,9 @@ public class DesignActivity extends ToolbarActivity {
     private int PLACE_PICKER_REQUEST = 1;
     private  String finalHtml=null,html;
     private FrameLayout videoFrameLayout;
+    private String userLocation;
+    private String slug;
+    private boolean isEdit=false;
     private Button nextButton,video_post_close;
     private ImageButton design_insert_video,design_insert_image,design_insert_link;
     private EditText designTitle,designShortDescription,designLocation;
@@ -71,12 +95,13 @@ public class DesignActivity extends ToolbarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_design);
 
-
+        final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(
+                new LatLng(37.398160, -122.180831), new LatLng(37.430610, -121.972090));
 
         designTitle = findViewById(R.id.designTitle);
         designTitle.setFocusable(true);
         designShortDescription = findViewById(R.id.designShortDescription);
-        designLocation = findViewById(R.id.design_location);
+       // designLocation = findViewById(R.id.design_location);
         design_insert_video=(ImageButton)findViewById(R.id.design_insert_video);
         design_insert_video.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,10 +115,32 @@ public class DesignActivity extends ToolbarActivity {
         video_post_close=(Button)findViewById(R.id.video_post_design_close);
         nextButton = findViewById(R.id.next_design);
 
+         autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(this);
+        autocompleteFragment.setHint("Enter your Location");
+        AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                .build();
+        autocompleteFragment.setFilter(typeFilter);
+        autocompleteFragment.setBoundsBias(BOUNDS_MOUNTAIN_VIEW);
+        ImageView searchIcon = (ImageView)((LinearLayout)autocompleteFragment.getView()).getChildAt(0);
+        searchIcon.setVisibility(View.GONE);
+
         SharedPreferences mPrefs =getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("MyObject", "");
         UserClass userClass = gson.fromJson(json, UserClass.class);
+
+        Intent intent=getIntent();
+        if(intent!=null)
+        {
+            Toast.makeText(this,intent.getStringExtra("Post_Slug_ID"),Toast.LENGTH_LONG).show();
+            isEdit=true;
+            slug=intent.getStringExtra("Post_Slug_ID");
+            designId=intent.getIntExtra("Post_ID",0);
+
+            FetchDataFromServerAndBindToViews(intent.getStringExtra("Post_Slug_ID"));
+        }
 
         profileImage = findViewById(R.id.design_profile);
         Glide.with(this).load("https://archsqr.in/"+userClass.getProfile())
@@ -108,29 +155,40 @@ public class DesignActivity extends ToolbarActivity {
             profileName.setText(userClass.getFirst_name()+"" +userClass.getLast_name());
         }
 
-//        designLocation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-//
-//                try {
-//                    startActivityForResult(builder.build(DesignActivity.this), PLACE_PICKER_REQUEST);
-//                } catch (GooglePlayServicesRepairableException e) {
-//                    e.printStackTrace();
-//                } catch (GooglePlayServicesNotAvailableException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
+
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("Design",editor.getContentAsHTML());
 
-                if (!TextUtils.isEmpty(designTitle.getText()) && !TextUtils.isEmpty(designShortDescription.getText()) &&
-                        !TextUtils.isEmpty(designLocation.getText())) {
+                if(isEdit)
+                {
+                    Intent intent=new Intent(getApplicationContext(),Design2Activity.class);
+                    intent.putExtra("ArticleEditClass",designEditClass);
+                    intent.putExtra("SecondPageDesignData", secondPageDesignData);
+                    //Intent intent=new Intent(getApplicationContext(),Design2Activity.class);
+                    intent.putExtra("Title",designTitle.getText().toString());
+                    intent.putExtra("slug",slug);
+                    intent.putExtra("designId",designId);
+
+                    if(userLocation!=null)
+                    {
+                        intent.putExtra("Location",userLocation);
+                    }
+                    else {
+                        intent.putExtra("Location",secondPageDesignData.getLocation());
+                    }
+                    intent.putExtra("ShortDescription",designShortDescription.getText().toString());
+                    if(finalHtml!=null)
+                        intent.putExtra("Description",finalHtml);
+                    else
+                        intent.putExtra("Description",editor.getContentAsHTML());
+
+                    startActivity(intent);
+
+                }
+                else if (!TextUtils.isEmpty(designTitle.getText()) && !TextUtils.isEmpty(designShortDescription.getText())) {
                     SendDesignDataToServer();
                 }
                 else {
@@ -347,12 +405,13 @@ public class DesignActivity extends ToolbarActivity {
                         // Toast.makeText(getApplicationContext(),"response"+response,Toast.LENGTH_LONG).show();
                         Intent intent=new Intent(getApplicationContext(),Design2Activity.class);
                         intent.putExtra("Title",designTitle.getText().toString());
-                        intent.putExtra("Location",designLocation.getText().toString());
+                        intent.putExtra("Location",userLocation);
                         intent.putExtra("ShortDescription",designShortDescription.getText().toString());
                         if(finalHtml!=null)
                             intent.putExtra("Description",finalHtml);
                         else
                             intent.putExtra("Description",editor.getContentAsHTML());
+
                         startActivity(intent);
 
                         editor.clearAllContents();
@@ -360,7 +419,7 @@ public class DesignActivity extends ToolbarActivity {
                             editor.setFocusable(View.NOT_FOCUSABLE);
                         }
                         designTitle.setText("");
-                        designLocation.setText("");
+                        //designLocation.setText("");
                         designShortDescription.setText("");
 
 
@@ -385,7 +444,7 @@ public class DesignActivity extends ToolbarActivity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("title",designTitle.getText().toString());
-                params.put("formatted_address",designLocation.getText().toString());
+                params.put("formatted_address",userLocation);
                 params.put("description_short", designShortDescription.getText().toString());
                 params.put("description", editor.getContentAsHTML());
                 params.put("post_type","design");
@@ -425,5 +484,195 @@ public class DesignActivity extends ToolbarActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    public void onPlaceSelected(Place place) {
+        userLocation=place.getAddress().toString();
+        autocompleteFragment.setText(userLocation);
+        //Toast.makeText(this,place.getName().toString()+place.getAddress().toString(),Toast.LENGTH_LONG).show();
+}
+
+    @Override
+    public void onError(Status status) {
+        Toast.makeText(this,status.toString(),Toast.LENGTH_LONG).show();
+    }
+
+    private void FetchDataFromServerAndBindToViews(String post_slug_id) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        // "https://archsqr.in/api/profile/detail/
+        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/post/design/edit/"+post_slug_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("ReponseFeed", response);
+                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonObjectFullPost = jsonObject.getJSONObject("designPostEdit");
+                            JSONObject jsonObjectSecondPageData = jsonObject.getJSONObject("secondpage_data");
+                             designEditClass = new ArticleEditClass(jsonObjectFullPost);
+                             secondPageDesignData = new SecondPageDesignData(jsonObjectSecondPageData);
+
+                            designTitle.setText(designEditClass.getTitle());
+                            designShortDescription.setText(designEditClass.getShort_description());
+                            //designLocation.setText(secondPageDesignData.getLocation());
+                            autocompleteFragment.setText(secondPageDesignData.getLocation());
+                            setContentToView(designEditClass.getDescription());
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer " + TokenClass.Token);
+                return params;
+            }
+
+        };
+        requestQueue.add(myReq);
+    }
+
+    public void setContentToView(String content){
+        List<String> p = new ArrayList<>();
+        List<String> src = new ArrayList<>();
+        Document doc = Jsoup.parse(content);
+
+        Elements elements = doc.getAllElements();
+
+        for(Element element :elements){
+            Tag tag = element.tag();
+
+            if(tag.getName().equalsIgnoreCase("a")){
+                String name  = element.html();
+                //String heading = element.select(tag.getName().toString()).text();
+                Log.v("des1",name);
+                if(name.contains("span")||name.contains("<i>")||name.contains("<b>"))
+                {
+                    continue;
+                }
+                else {
+                    editor.getInputExtensions().insertEditText(0,"",name);
+                }
+
+            }
+
+            else if(tag.getName().equalsIgnoreCase("b")){
+                String title  = element.html();
+                //String heading = element.select(tag.getName().toString()).text();
+                Log.v("des2",title);
+                if(title.contains("href")||title.equals("<br>"))
+                {
+                    continue;
+                }
+
+                else {
+                    editor.getInputExtensions().insertEditText(1,"",title);
+                    continue;
+                }
+
+            }
+
+            else if(tag.getName().equalsIgnoreCase("p")){
+
+                element.select("img").remove();
+                String body= element.html();
+
+                String[] parsedBody=body.split("\\.");
+                StringBuilder builder = new StringBuilder();
+                for(String s : parsedBody) {
+                    Log.v("des3",s);
+                    if(s.contains("<span")||s.contains("</span>")||s.contains("<br>"))
+                    {
+                        continue;
+                    }
+                    else
+                        builder.append(s+".");
+                }
+                String str = builder.toString();
+                if(body.contains("href")||body.equals("<br>")||body.contains("<b>"))
+                {
+                    continue;
+                }
+                else {
+                    editor.getInputExtensions().insertEditText(0,"",str);
+                    continue;
+                }
+
+
+            }
+            else if (tag.getName().equalsIgnoreCase("img")){
+                String url  = element.select("img").attr("src");
+                Log.v("des4",url);
+
+                Glide.with(this)
+                        .asBitmap()
+                        .load(url)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                Bitmap bitmapResized = Bitmap.createScaledBitmap(resource,
+                                        (int) (resource.getWidth() * 0.5), (int) (resource.getHeight() * 0.5), false);
+                                imageString=getStringImage(resource);
+                                editor.insertImage(bitmapResized);
+                            }
+                        });
+                continue;
+            }
+            else if (tag.getName().equalsIgnoreCase("iframe")){
+                String url  = element.select("iframe").attr("src");
+                Log.v("des5",url);
+                final WebView myWebView = (WebView) findViewById(R.id.articleVideoView);
+                myWebView.setWebViewClient(new WebViewClient());
+                myWebView.getSettings().setJavaScriptEnabled(true);
+                myWebView.setWebChromeClient(new WebChromeClient());
+                String[] stringId=url.split("/");
+                String id=stringId[stringId.length-1];
+                String src1="src="+'"'+"https://www.youtube.com/embed/"+id+'"';
+                String html="<iframe width=\"100%\" height=\"400\" "+src1+"frameborder=\"0\" allowfullscreen=\"\"></iframe>";
+
+                finalHtml="   <html>\n" +
+                        "  <head>\n" +
+                        "    <title>Combined</title>\n" +
+                        "  </head>\n" +
+                        "  <body>\n" +
+                        "    <div id=\"page1\">\n" +
+                        editor.getContentAsHTML() +
+                        "    </div>\n" +
+                        "    <div id=\"page2\">\n" +
+                        html +
+                        "    </div>\n" +
+                        "  </body>\n" +
+                        "</html>";
+
+                myWebView.loadDataWithBaseURL(url,html, "text/html", "UTF-8", "");
+                videoFrameLayout.setVisibility(View.VISIBLE);
+//
+                video_post_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoFrameLayout.setVisibility(View.GONE);
+                    }
+                });
+                continue;
+            }
+            }
     }
 }

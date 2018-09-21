@@ -176,9 +176,6 @@ public class StatusFragment extends Fragment {
         jsonObject = new JSONObject();
 
 
-//        mRemoveButton = rootView.findViewById(R.id.ib_remove);
-//        displayImage.setVisibility(View.GONE);
-//        mRemoveButton.setVisibility(View.GONE);
 
         sharedPreferences = this.getActivity().getSharedPreferences("PREF_NAME", this.getActivity().MODE_PRIVATE);
         token = sharedPreferences.getString("TOKEN", "sqr");
@@ -217,6 +214,18 @@ public class StatusFragment extends Fragment {
 
         //RealTimeNotificationListner();
         ref.child("notification").child(userClass.getUserId()+"").child("all").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                HomeScreen.getnotificationCount();
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

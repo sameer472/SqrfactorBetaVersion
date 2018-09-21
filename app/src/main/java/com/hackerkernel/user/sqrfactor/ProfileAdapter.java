@@ -250,11 +250,58 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
                         likeCount=likeCount+1;
                         holder.buttonLikeList.setText(likeCount+" Like");
                     }
-
                     database= FirebaseDatabase.getInstance();
                     ref = database.getReference();
+                    SharedPreferences mPrefs =context.getSharedPreferences("User",MODE_PRIVATE);
+                    Gson gson = new Gson();
+                    String json = mPrefs.getString("MyObject", "");
+                    UserClass userClass = gson.fromJson(json, UserClass.class);
 
                     Log.v("daattataatat",userClass.getUserId()+" "+userClass.getProfile()+" ");
+                    if(profileClass.getType().equals("status")&& userClass.getUserId()!=profileClass.getUserId())
+                    {
+                        PushNotificationClass pushNotificationClass;
+                        from_user fromUser;
+                        post post1=new post(profileClass.getFullDescription(),profileClass.getSlug(),"post Title",profileClass.getType(),profileClass.getPostId());
+                        if(userClass.getName()!="null")
+                        {
+                            fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+                        else
+                        {
+                            fromUser=new from_user(userClass.getEmail(),userClass.getFirst_name()+" "+userClass.getLast_name(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                            pushNotificationClass=new PushNotificationClass(userClass.getFirst_name()+" "+userClass.getLast_name()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+
+                        String key =ref.child("notification").child(profileClass.getUserId()+"").child("all").push().getKey();
+                        ref.child("notification").child(profileClass.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
+                        Map<String,String> unred=new HashMap<>();
+                        unred.put("unread",key);
+                        ref.child("notification").child(profileClass.getUserId()+"").child("unread").child(key).setValue(unred);
+                    }
+                    else if(userClass.getUserId()!=profileClass.getUserId())
+                    {
+                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                        post post1=new post(profileClass.getShortDescription(),profileClass.getSlug(),profileClass.getPostTitle(),profileClass.getType(),profileClass.getPostId());
+                        PushNotificationClass pushNotificationClass;
+                        if(userClass.getName().equals("null"))
+                        {
+                            pushNotificationClass=new PushNotificationClass(userClass.getUser_name()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+                        else
+                        {
+                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+
+                        //=new PushNotificationClass(userClass.getUser_name()+" liked your article",new Date().getTime(),fromUser,post1,"like_post");
+                        String key =ref.child("notification").child(profileClass.getUserId()+"").child("all").push().getKey();
+                        ref.child("notification").child(profileClass.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
+                        Map<String,String> unred=new HashMap<>();
+                        unred.put("unread",key);
+                        ref.child("notification").child(profileClass.getUserId()+"").child("unread").child(key).setValue(unred);
+
+                    }
                 }
                 else {
 

@@ -94,6 +94,7 @@ public class HomeScreen extends ToolbarActivity {
     private ArrayList<SearchResultClass> searchResultClasses=new ArrayList<>();
     private RecyclerView recyclerView;
     BadgeView badge7;
+    View v;
     private FragmentTabHost mTabHost;
     static int count1;
     private UserClass userClass;
@@ -206,8 +207,8 @@ public class HomeScreen extends ToolbarActivity {
 
                     case 2:
                         tab.setIcon(R.drawable.notifycolor1);
-                        //if(tab.getCustomView()!=null)
-                        View v = tab.getCustomView().findViewById(R.id.badgeCotainer);
+                        if(tab.getCustomView()!=null)
+                         v = tab.getCustomView().findViewById(R.id.badgeCotainer);
                         if(v != null) {
                             v.setVisibility(View.GONE);
                         }
@@ -450,6 +451,12 @@ public class HomeScreen extends ToolbarActivity {
         this.context=getApplicationContext();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.context=getApplicationContext();
+    }
+
     public static void  getnotificationCount(){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/notificationcount",
@@ -509,44 +516,38 @@ public class HomeScreen extends ToolbarActivity {
         requestQueue.add(myReq);
     }
 
-//    private void RealTimeNotificationListner()
-//    {
-//
-//        ref.child("Notifications").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                Toast.makeText(getApplicationContext(),"real Notification changed",Toast.LENGTH_LONG).show();
-//
-//                getnotificationCount();
-//
-//            }
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//    }
-    public void getUnReadMsgCount(){
-        RequestQueue requestQueue = Volley.newRequestQueue(HomeScreen.this);
 
-        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/notificationcount",
+    public static void getUnReadMsgCount(){
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+
+        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/unread_counts",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.v("ReponseFeed", response);
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                        TabLayout.Tab tab = tabLayout.getTabAt(1);
-                        tab.setCustomView(R.layout.badage);
-                        if(tab != null && tab.getCustomView() != null) {
-                            TextView b = (TextView) tab.getCustomView().findViewById(R.id.badge);
-                            if(b != null) {
-                                b.setText("3");
-                            }
-                            View v = tab.getCustomView().findViewById(R.id.badgeCotainer);
-                            if(v != null) {
-                                v.setVisibility(View.VISIBLE);
+                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+                            count1 =jsonObject.getInt("count");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        if(count1!=0) {
+                            TabLayout.Tab tab1 = tabLayout.getTabAt(1);
+                            if (tab1.getCustomView() == null)
+                                tab1.setCustomView(R.layout.badage);
+
+                            if (tab1 != null && tab1.getCustomView() != null) {
+                                TextView b = (TextView) tab1.getCustomView().findViewById(R.id.badge);
+                                if (b != null) {
+                                    b.setText(count1 + "");
+                                }
+                                View v = tab1.getCustomView().findViewById(R.id.badgeCotainer);
+                                if (v != null) {
+                                    v.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                     }

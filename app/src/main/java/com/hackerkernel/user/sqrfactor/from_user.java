@@ -6,13 +6,23 @@ public class from_user implements Serializable {
     private String email;
     private String name;
     private int id;
+    private String profileUrl;
     private String username;
 
-    public from_user(String email, String name, int id, String username) {
+    public from_user(String email, String name, int id, String username,String profileUrl) {
         this.email = email;
         this.name = name;
         this.id = id;
         this.username = username;
+        this.profileUrl=profileUrl;
+    }
+
+    public String getProfileUrl() {
+        return profileUrl;
+    }
+
+    public void setProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 
     public String getEmail() {

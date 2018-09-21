@@ -221,20 +221,30 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                             case R.id.fullView:
                                 Intent intent=new Intent(context,FullPostActivity.class);
                                 intent.putExtra("Post_Slug_ID",newsFeedStatus.getSlug());
+                                intent.putExtra("Post_ID",newsFeedStatus.getPostId());
                                 context.startActivity(intent);
                                 break;
                             case R.id.editPost:
                                 if(newsFeedStatus.getType().equals("design"))
                                 {
-                                    context.startActivity(new Intent(context,DesignActivity.class));
+                                    Intent intent1=new Intent(context,DesignActivity.class);
+                                    intent1.putExtra("Post_Slug_ID",newsFeedStatus.getSlug());
+                                    intent1.putExtra("Post_ID",newsFeedStatus.getPostId());
+                                    context.startActivity(intent1);
                                 }
                                 else if(newsFeedStatus.getType().equals("article"))
                                 {
-                                    context.startActivity(new Intent(context,ArticleActivity.class));
+                                    Intent intent1=new Intent(context,ArticleActivity.class);
+                                    intent1.putExtra("Post_Slug_ID",newsFeedStatus.getSlug());
+                                    intent1.putExtra("Post_ID",newsFeedStatus.getPostId());
+                                    context.startActivity(intent1);
                                 }
                                 else if(newsFeedStatus.getType().equals("status"))
                                 {
-                                    context.startActivity(new Intent(context,ArticleActivity.class));
+                                    Intent intent1=new Intent(context,StatusPostActivity.class);
+                                    intent1.putExtra("Post_Slug_ID",newsFeedStatus.getSlug());
+                                    intent1.putExtra("Post_ID",newsFeedStatus.getPostId());
+                                    context.startActivity(intent1);
                                 }
                                 break;
                             case R.id.deletePost:
@@ -311,22 +321,43 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     UserClass userClass = gson.fromJson(json, UserClass.class);
 
                     Log.v("daattataatat",userClass.getUserId()+" "+userClass.getProfile()+" ");
-                    if(newsFeedStatus.getType().equals("status"))
+                    if(newsFeedStatus.getType().equals("status")&& userClass.getUserId()!=newsFeedStatus.getUserId())
                     {
-                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
-                        post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
-                        PushNotificationClass pushNotificationClass=new PushNotificationClass("liked your status",new Date().getTime(),fromUser,post1,"like_post");
+                        PushNotificationClass pushNotificationClass;
+                        from_user fromUser;
+                        post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),"post Title",newsFeedStatus.getType(),newsFeedStatus.getPostId());
+                        if(userClass.getName()!="null")
+                        {
+                            fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+                        else
+                        {
+                            fromUser=new from_user(userClass.getEmail(),userClass.getFirst_name()+" "+userClass.getLast_name(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                            pushNotificationClass=new PushNotificationClass(userClass.getFirst_name()+" "+userClass.getLast_name()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+
                         String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
                         ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
                         Map<String,String> unred=new HashMap<>();
                         unred.put("unread",key);
                         ref.child("notification").child(newsFeedStatus.getUserId()+"").child("unread").child(key).setValue(unred);
                     }
-                    else
+                    else if(userClass.getUserId()!=newsFeedStatus.getUserId())
                     {
-                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
+                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
                         post post1=new post(newsFeedStatus.getShortDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
-                        PushNotificationClass pushNotificationClass=new PushNotificationClass("liked your article",new Date().getTime(),fromUser,post1,"like_post");
+                        PushNotificationClass pushNotificationClass;
+                        if(userClass.getName().equals("null"))
+                        {
+                            pushNotificationClass=new PushNotificationClass(userClass.getUser_name()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+                        else
+                        {
+                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+                        }
+
+                       //=new PushNotificationClass(userClass.getUser_name()+" liked your article",new Date().getTime(),fromUser,post1,"like_post");
                         String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
                         ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
                         Map<String,String> unred=new HashMap<>();
@@ -420,14 +451,29 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                                 String json = mPrefs.getString("MyObject", "");
                                 UserClass userClass = gson.fromJson(json, UserClass.class);
 
-                                from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
-                                post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
-                                PushNotificationClass pushNotificationClass=new PushNotificationClass("commented on your&nbsparticle",new Date().getTime(),fromUser,post1,"comment");
-                                String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
-                                ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
-                                Map<String,String> unred=new HashMap<>();
-                                unred.put("unread",key);
-                                ref.child("notification").child(newsFeedStatus.getUserId()+"").child("unread").child(key).setValue(unred);
+                                if(userClass.getUserId()!=newsFeedStatus.getUserId())
+                                {
+                                    from_user fromUser;
+                                    post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
+                                    PushNotificationClass pushNotificationClass;
+                                    if(userClass.getName()!="null")
+                                    {
+                                        fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                                        pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                                    }
+                                    else
+                                    {
+                                        fromUser=new from_user(userClass.getEmail(),userClass.getFirst_name()+" "+userClass.getLast_name(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+                                        pushNotificationClass=new PushNotificationClass(userClass.getFirst_name()+" "+userClass.getLast_name()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+                                    }
+
+                                    String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
+                                    ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
+                                    Map<String,String> unred=new HashMap<>();
+                                    unred.put("unread",key);
+                                    ref.child("notification").child(newsFeedStatus.getUserId()+"").child("unread").child(key).setValue(unred);
+                                }
+
 
                                 holder.writeComment.setText("");
                                 commentsCount=commentsCount+1;

@@ -153,7 +153,7 @@ public class LoginFragment extends Fragment {
                             UserClass userClass = new UserClass(jsonObject);
                             // notification listner for like and comment
                             FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications" + userClass.getUserId());
-                            FirebaseMessaging.getInstance().subscribeToTopic("chats"+userClass.getUserId());
+                            //FirebaseMessaging.getInstance().subscribeToTopic("chats"+userClass.getUserId());
                             //code for user status
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             Date date = new Date();

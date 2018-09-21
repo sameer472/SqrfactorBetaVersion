@@ -285,7 +285,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                                 holder.comment_card.setVisibility(View.VISIBLE);
                                 database= FirebaseDatabase.getInstance();
                                 ref = database.getReference();
-                                from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
+                                from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
                                 post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
                                 PushNotificationClass pushNotificationClass=new PushNotificationClass("commented on your&nbsparticle",new Date().getTime(),fromUser,post1,"comment");
                                 String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
@@ -351,7 +351,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                     Log.v("daattataatat",userClass.getUserId()+" "+userClass.getProfile()+" ");
                     if(newsFeedStatus.getType().equals("status"))
                     {
-                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
+                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
                         post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
                         PushNotificationClass pushNotificationClass=new PushNotificationClass("liked your status",new Date().getTime(),fromUser,post1,"like_post");
                         String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
@@ -362,7 +362,7 @@ public class UserProfileAdapter extends RecyclerView.Adapter<UserProfileAdapter.
                     }
                     else
                     {
-                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name());
+                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
                         post post1=new post(newsFeedStatus.getShortDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
                         PushNotificationClass pushNotificationClass=new PushNotificationClass("liked your article",new Date().getTime(),fromUser,post1,"like_post");
                         String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();

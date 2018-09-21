@@ -14,7 +14,6 @@ public class ChatFriends implements Serializable {
     public String isOnline;
     public String lastSeen;
     public String name;
-
     public String getLastSeen() {
         return lastSeen;
     }
@@ -57,12 +56,6 @@ public class ChatFriends implements Serializable {
             this.userID = jsonObject.getInt("id");
             this.userName = jsonObject.getString("first_name") +" "+jsonObject.getString("last_name");
             this.name=jsonObject.getString("name");
-            // Log.v("name",firstName);
-            //Toast.makeText(, "", Toast.LENGTH_SHORT).show();
-//           if(firstName==null) {
-//               this.userName = jsonObject.getString("name");
-//               Log.v("name2", jsonObject.getString("name"));
-//           }
             this.userProfile = jsonObject.getString("profile");
 
 

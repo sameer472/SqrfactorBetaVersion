@@ -77,7 +77,7 @@ public class MessageFragment extends Fragment {
         SharedPreferences mPrefs =getActivity().getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("MyObject", "");
-        UserClass userClass = gson.fromJson(json, UserClass.class);
+        final UserClass userClass = gson.fromJson(json, UserClass.class);
         //String token_id=FirebaseInstanceId.getInstance().getToken();
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
@@ -91,12 +91,12 @@ public class MessageFragment extends Fragment {
                             //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
-                                JSONObject user=jsonObject.getJSONObject("user");
+                                //JSONObject user=jsonObject.getJSONObject("user");
 
                                 //CurrentLoginedUser currentLoginedUser=new CurrentLoginedUser(userId,userName,userProfile);
-                                userProfile=user.getString("profile");
-                                userName=user.getString("name");
-                                userId=user.getInt("id");
+                                userProfile=userClass.getProfile();//user.getString("profile");
+                                userName=userClass.getName();//user.getString("name");
+                                userId=userClass.getUserId();//user.getInt("id");
 
                                 JSONArray jsonArrayData = jsonObject.getJSONArray("friends");
                                 for (int i = 0; i < jsonArrayData.length(); i++) {
@@ -106,9 +106,7 @@ public class MessageFragment extends Fragment {
                                     chatFriends.add(chatFriends1);
                                 }
                                 chatAdapter.notifyDataSetChanged();
-//                                DatabaseReference presenceRef = FirebaseDatabase.getInstance().getReference().child("Status").child(userId+"");
-//                                IsOnline isOnline=new IsOnline("False",ServerValue.TIMESTAMP.toString());
-//                                presenceRef.onDisconnect().setValue(isOnline);
+//
                                 StatusLinstner();
 
 

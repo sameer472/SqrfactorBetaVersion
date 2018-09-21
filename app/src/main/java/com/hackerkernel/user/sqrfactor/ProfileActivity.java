@@ -40,9 +40,9 @@ import java.util.Map;
 
 public class ProfileActivity extends ToolbarActivity {
     private ArrayList<ProfileClass1> profileClassList = new ArrayList<>();
-    private ImageView displayImage;
-    private ImageView camera;// button
-    public ImageButton mRemoveButton;
+//    private ImageView displayImage;
+//    private ImageView camera;// button
+//    public ImageButton mRemoveButton;
     private ProfileAdapter profileAdapter;
     RecyclerView recyclerView;
     Toolbar toolbar;
@@ -312,16 +312,12 @@ public class ProfileActivity extends ToolbarActivity {
 
     }
     public void LoadMoreDataFromServer(){
-
-
         if(nextPageUrl!=null) {
-            RequestQueue requestQueue = Volley.newRequestQueue(context);
+            RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
             StringRequest myReq = new StringRequest(Request.Method.GET, nextPageUrl,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Log.v("ReponseFeed", response);
-                            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 nextPageUrl = jsonObject.getString("nextPage");
@@ -359,8 +355,6 @@ public class ProfileActivity extends ToolbarActivity {
                 }
 
             };
-
-
             requestQueue.add(myReq);
         }
 

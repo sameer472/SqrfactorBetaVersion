@@ -166,7 +166,18 @@ public class NotificationsFragment extends Fragment {
 
             }
         });
+        ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                HomeScreen.getnotificationCount();
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return view;
 

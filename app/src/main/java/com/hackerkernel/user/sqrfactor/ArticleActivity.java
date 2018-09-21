@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
@@ -39,7 +40,9 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -67,6 +70,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.github.irshulx.Editor;
 import com.github.irshulx.EditorListener;
 import com.google.gson.Gson;
@@ -75,6 +80,11 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -85,6 +95,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //import io.github.angebagui.mediumtextview.MediumTextView;
@@ -98,10 +109,11 @@ public class ArticleActivity extends ToolbarActivity {
     private MultiAutoCompleteTextView multiAutoCompleteTextView;
     private Uri uri;
     private  String finalHtml=null;
-
+    private boolean isEdit=false;
     String cropedImage;
     private WebView videoView;
     private String html;
+    private int postId;
     private String imageString;
     private Button saveArticleButton,video_post_close;
     private EditText articleTitle,articleShortDescription;//articleTag;
@@ -110,6 +122,7 @@ public class ArticleActivity extends ToolbarActivity {
     private ImageView articleCustomBaneerImage,cropFinalImage,profileImage,selectBanerImageIcon,banner_attachment_image;
     private FrameLayout videoFrameLayout;
     private ImageButton article_insert_video;
+    private String Slug=null;
     Intent CamIntent, GalIntent, CropIntent ;
     public  static final int RequestPermissionCode  = 1 ;
 
@@ -151,6 +164,19 @@ public class ArticleActivity extends ToolbarActivity {
 
         //articleTag = findViewById(R.id.articleTags);
         saveArticleButton = findViewById(R.id.saveArticle);
+
+
+        Intent intent=getIntent();
+        if(intent!=null)
+        {
+            Toast.makeText(this,intent.getStringExtra("Post_Slug_ID"),Toast.LENGTH_LONG).show();
+            isEdit=true;
+            Slug=intent.getStringExtra("Post_Slug_ID");
+            postId=intent.getIntExtra("Post_ID",0);
+            FetchDataFromServerAndBindToViews(intent.getStringExtra("Post_Slug_ID"));
+
+
+        }
 
         SharedPreferences mPrefs =getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
@@ -272,7 +298,14 @@ public class ArticleActivity extends ToolbarActivity {
                 Bitmap bitmap = drawable.getBitmap();
                 String image=getStringImage(bitmap);
                 Log.v("cropedImage",image);
-                SendArticleDataToServer(image);
+                if(isEdit)
+                {
+                    SendArticleDataToServer1(image,"https://archsqr.in/api/article-edit");
+                }
+                else {
+                    SendArticleDataToServer(image,"https://archsqr.in/api/article-parse-post");
+                }
+
                 // Toast.makeText(getApplicationContext(),editor.getContentAsHTML(),Toast.LENGTH_LONG).show();
 //                if (!TextUtils.isEmpty(articleTitle.getText()) && !TextUtils.isEmpty(articleShortDescription.getText()) &&
 //                        !TextUtils.isEmpty(articleTag.getText())) {
@@ -315,7 +348,7 @@ public class ArticleActivity extends ToolbarActivity {
 
             @Override
             public void onUpload(Bitmap image, String uuid) {
-                Toast.makeText(ArticleActivity.this, uuid, Toast.LENGTH_LONG).show();
+                Toast.makeText(ArticleActivity.this, "testing1", Toast.LENGTH_LONG).show();
                 uploadEditorImageToServer(uuid);
 
             }
@@ -323,6 +356,8 @@ public class ArticleActivity extends ToolbarActivity {
         editor.render();
 
     }
+
+
 
     private void GetTagFromServer() {
 
@@ -382,7 +417,9 @@ public class ArticleActivity extends ToolbarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         try {
+
                             JSONObject jsonObject = new JSONObject(response);
                             String Imgurl=jsonObject.getString("asset_image");
                             editor.onImageUploadComplete(Imgurl, uuid);
@@ -668,10 +705,10 @@ public class ArticleActivity extends ToolbarActivity {
 //    }
 
 
-    public void SendArticleDataToServer(final String image)
+    public void SendArticleDataToServer(final String image,final String url)
     {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/article-parse-post",
+        StringRequest myReq = new StringRequest(Request.Method.POST,url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -706,8 +743,8 @@ public class ArticleActivity extends ToolbarActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                Log.v("article",articleTitle.getText().toString()+" "+multiAutoCompleteTextView.getText().toString()+" "+articleShortDescription.getText().toString()+
-                " "+image+ " "+finalHtml);
+//                Log.v("article",articleTitle.getText().toString()+" "+multiAutoCompleteTextView.getText().toString()+" "+articleShortDescription.getText().toString()+
+//                " "+image+ " "+finalHtml);
 
                 params.put("post_type","article");
                 params.put("title",articleTitle.getText().toString());
@@ -716,6 +753,64 @@ public class ArticleActivity extends ToolbarActivity {
                 params.put("banner_image","data:image/jpeg;base64,"+image);
                 if(finalHtml!=null)
                   params.put("description",finalHtml);
+                else
+                    params.put("description",editor.getContentAsHTML());
+                return params;
+            }
+        };
+
+        requestQueue.add(myReq);
+    }
+
+
+    public void SendArticleDataToServer1(final String image,final String url)
+    {
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest myReq = new StringRequest(Request.Method.POST,url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("Reponse", response);
+                        Toast.makeText(getApplicationContext(),"response"+response,Toast.LENGTH_LONG).show();
+                        editor.clearAllContents();
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            editor.setFocusable(View.NOT_FOCUSABLE);
+//                        }
+                        multiAutoCompleteTextView.setText("");
+                        articleTitle.setText("");
+                        articleShortDescription.setText("");
+                        cropFinalImage.setVisibility(View.GONE);
+
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer "+TokenClass.Token);
+                return params;
+            }
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                Log.v("article1",articleTitle.getText().toString()+" "+multiAutoCompleteTextView.getText().toString()+" "+articleShortDescription.getText().toString()+
+               " "+finalHtml+" "+Slug +" "+image+ " ");
+                params.put("id",postId+"");
+                params.put("title",articleTitle.getText().toString());
+                params.put("tags",multiAutoCompleteTextView.getText().toString());
+                params.put("description_short",articleShortDescription.getText().toString());
+                params.put("slug",Slug);
+                params.put("banner_image","data:image/jpeg;base64,"+image);
+                if(finalHtml!=null)
+                    params.put("description",finalHtml);
                 else
                     params.put("description",editor.getContentAsHTML());
                 return params;
@@ -824,46 +919,6 @@ public class ArticleActivity extends ToolbarActivity {
 
 
     }
-    public void showPopup1(){
-        LayoutInflater li = LayoutInflater.from(this);
-        final View promptsView = li.inflate(R.layout.post_video_link_popup, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
-
-        // set prompts.xml to alertdialog builder
-        alertDialogBuilder.setView(promptsView);
-
-        final EditText userInput = (EditText) promptsView
-                .findViewById(R.id.post_video_link);
-        alertDialogBuilder
-                .setCancelable(false)
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                // get user input and set it to result
-                                // edit text
-                                String videoLink = userInput.getText().toString();
-                                editor.insertLink(videoLink);
-                                //result.setText(userInput.getText());
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-        // AlertDialog alertDialog = alertDialogBuilder.create();
-
-
-    }
 
     private void showVideo(String videoLink)
     {
@@ -912,5 +967,212 @@ public class ArticleActivity extends ToolbarActivity {
         });
     }
 
+    private void FetchDataFromServerAndBindToViews(String post_slug_id) {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        // "https://archsqr.in/api/profile/detail/
+        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/post/article/edit/"+post_slug_id,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("response",response);
+                        //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject jsonObjectFullPost = jsonObject.getJSONObject("articlePostEdit");
+                            final ArticleEditClass articleEditClass = new ArticleEditClass(jsonObjectFullPost);
+                            articleTitle.setText(articleEditClass.getTitle());
+                            articleShortDescription.setText(articleEditClass.getShort_description());
+                            //multiAutoCompleteTextView.setText(fullPost.get);
+
+                            if(articleEditClass.getImage()!=null) {
+                                Glide.with(getApplicationContext())
+                                        .asBitmap()
+                                        .load("https://archsqr.in/"+articleEditClass.getImage())
+                                        .into(new SimpleTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                Bitmap bitmapResized = Bitmap.createScaledBitmap(resource,
+                                                        (int) (resource.getWidth() * 0.5), (int) (resource.getHeight() * 0.5), false);
+                                                imageString = getStringImage(resource);
+                                                editor.insertImage(bitmapResized);
+                                            }
+                                        });
+                            }
+                            //Log.v("des0",articleEditClass.getDescription());
+
+                            setContentToView(articleEditClass.getDescription());
+                             if(articleEditClass.getBanner_image()!=null)
+                             {
+
+
+                                 Glide.with(getApplicationContext()).load("https://archsqr.in/"+articleEditClass.getBanner_image())
+                                         .into(cropFinalImage);
+                                 cropFinalImage.setVisibility(View.VISIBLE);
+                             }
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer " + TokenClass.Token);
+                return params;
+            }
+
+        };
+        requestQueue.add(myReq);
+    }
+
+    public void setContentToView(String content){
+        List<String> p = new ArrayList<>();
+        List<String> src = new ArrayList<>();
+        Document doc = Jsoup.parse(content);
+
+        Elements elements = doc.getAllElements();
+        int pos=0;
+
+        for(Element element :elements){
+            Tag tag = element.tag();
+
+            if(tag.getName().equalsIgnoreCase("a")){
+                String name  = element.html();
+                //String heading = element.select(tag.getName().toString()).text();
+                Log.v("des1",name);
+                if(name.contains("span")||name.contains("<i>")||name.contains("<b>"))
+                {
+                    continue;
+                }
+                else {
+                    editor.getInputExtensions().insertEditText(pos,"",name);
+                    pos++;
+                }
+
+            }
+
+            else if(tag.getName().equalsIgnoreCase("b")){
+                String title  = element.html();
+                //String heading = element.select(tag.getName().toString()).text();
+                Log.v("des2",title);
+                if(title.contains("&nbsp")||title.contains("href")||title.equals("<br>"))
+                {
+                    continue;
+                }
+
+                else {
+                    editor.getInputExtensions().insertEditText(pos,"",title);
+                    pos++;
+                    continue;
+                }
+
+            }
+
+            else if(tag.getName().equalsIgnoreCase("p")){
+
+                element.select("img").remove();
+                String body= element.html();
+
+                String[] parsedBody=body.split("\\.");
+                StringBuilder builder = new StringBuilder();
+                for(String s : parsedBody) {
+                    Log.v("des3",s);
+                    if(s.contains("&nbsp")||s.contains("<span")||s.contains("</span>")||s.contains("<br>"))
+                    {
+                        continue;
+                    }
+                    else
+                        builder.append(s+".");
+                }
+                String str = builder.toString();
+                if(body.contains("href")||body.equals("<br>")||body.contains("<b>"))
+                {
+                    continue;
+                }
+                else {
+                    editor.getInputExtensions().insertEditText(pos,"",str);
+                    pos++;
+                    continue;
+                }
+
+
+            }
+            else if (tag.getName().equalsIgnoreCase("img")){
+                String url  = element.select("img").attr("src");
+                Log.v("des4",url);
+
+                Glide.with(this)
+                        .asBitmap()
+                        .load(url)
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                Bitmap bitmapResized = Bitmap.createScaledBitmap(resource,
+                                        (int) (resource.getWidth() * 0.5), (int) (resource.getHeight() * 0.5), false);
+                                imageString=getStringImage(resource);
+                                editor.insertImage(bitmapResized);
+                            }
+                        });
+                continue;
+            }
+            else if (tag.getName().equalsIgnoreCase("iframe")){
+                String url  = element.select("iframe").attr("src");
+                Log.v("des5",url);
+
+
+                final WebView myWebView = (WebView) findViewById(R.id.articleVideoView);
+                myWebView.setWebViewClient(new WebViewClient());
+                myWebView.getSettings().setJavaScriptEnabled(true);
+                myWebView.setWebChromeClient(new WebChromeClient());
+
+                String[] stringId=url.split("/");
+                String id=stringId[stringId.length-1];
+                String src1="src="+'"'+"https://www.youtube.com/embed/"+id+'"';
+                String html="<iframe width=\"100%\" height=\"400\" "+src1+"frameborder=\"0\" allowfullscreen=\"\"></iframe>";
+
+                finalHtml="   <html>\n" +
+                        "  <head>\n" +
+                        "    <title>Combined</title>\n" +
+                        "  </head>\n" +
+                        "  <body>\n" +
+                        "    <div id=\"page1\">\n" +
+                        editor.getContentAsHTML() +
+                        "    </div>\n" +
+                        "    <div id=\"page2\">\n" +
+                        html +
+                        "    </div>\n" +
+                        "  </body>\n" +
+                        "</html>";
+
+                myWebView.loadDataWithBaseURL(url,html, "text/html", "UTF-8", "");
+                videoFrameLayout.setVisibility(View.VISIBLE);
+//
+                video_post_close.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        videoFrameLayout.setVisibility(View.GONE);
+                    }
+                });
+                continue;
+            }
+
+
+
+        }
+    }
 
 }

@@ -67,6 +67,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.MyView
 
        // FollowMethod(likeClass.getId(),holder.followbtn);
 
+
         if(likeClass.getName().equals("null"))
         {
             holder.profileName.setText(likeClass.getFirst_name()+" "+likeClass.getLast_name());
@@ -77,6 +78,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.MyView
         }
         Glide.with(context).load("https://archsqr.in/"+likeClass.getProfile_url())
                 .into(holder.profileImage);
+        holder.followbtn.setText(likeClass.getIsFollowing());
         holder.followbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

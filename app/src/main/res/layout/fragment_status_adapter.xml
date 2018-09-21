@@ -253,7 +253,7 @@
                         android:id="@+id/news_comment_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Henry Cavill"
+                        android:text=""
                         android:textSize="16sp"
                         android:fontFamily="@font/roboto_medium"/>
 
@@ -261,7 +261,7 @@
                         android:id="@+id/news_comment_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5 minutes ago"
+                        android:text=""
                         android:fontFamily="@font/roboto"
                         android:textSize="12sp"/>
 
@@ -280,7 +280,7 @@
                 android:id="@+id/news_comment_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nice work there!"
+                android:text=""
                 android:fontFamily="@font/roboto"
                 android:textSize="16sp"
                 android:layout_marginTop="6sp"
@@ -309,7 +309,7 @@
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="2 Like"
+                    android:text="0 Like"
                     android:textAllCaps="false"
                     android:textColor="@color/gray" />
             </LinearLayout>
