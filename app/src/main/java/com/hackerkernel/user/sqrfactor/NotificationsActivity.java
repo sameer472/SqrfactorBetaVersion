@@ -100,7 +100,7 @@ public class NotificationsActivity extends ToolbarActivity {
 //                {
 //                    Toast.makeText(context,"moving up",Toast.LENGTH_SHORT).show();
 //                }
-                if(dy>0 && lastId + 3 > linearLayoutManager.getItemCount() && !isLoading)
+                if(dy>0 && lastId + 2 > linearLayoutManager.getItemCount() && !isLoading)
                 {
                     isLoading=true;
                     Log.v("rolling",linearLayoutManager.getChildCount()+" "+linearLayoutManager.getItemCount()+" "+linearLayoutManager.findLastVisibleItemPosition()+" "+
@@ -163,7 +163,7 @@ public class NotificationsActivity extends ToolbarActivity {
     public void LoadMoreNotification(){
         if(nextPageUrl!= null){
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/notifications",
+        StringRequest myReq = new StringRequest(Request.Method.POST, nextPageUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

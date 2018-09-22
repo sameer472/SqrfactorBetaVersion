@@ -139,6 +139,12 @@ public class MessageFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getAllFriendsList();
+    }
+
     private void getAllFriendsList() {
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
 

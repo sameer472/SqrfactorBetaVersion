@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -146,7 +147,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     Intent intent=new Intent(context,UserProfileActivity.class);
                     intent.putExtra("User_id",newsFeedStatus.getUserId());
                     intent.putExtra("ProfileUserName",newsFeedStatus.getUser_name_of_post());
-                    intent.putExtra("FriendName",newsFeedStatus.getAuthImageUrl());
+                   // intent.putExtra("FriendName",newsFeedStatus.getAuthImageUrl());
                     context.startActivity(intent);
                 }
 
@@ -164,31 +165,38 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             }
         });
         String dtc = newsFeedStatus.getTime();
-       // Log.v("dtc",dtc);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM",Locale.ENGLISH);
-        Log.v("sdf1",sdf1.toString());
-        Log.v("sdf2",sdf2.toLocalizedPattern());
-        Date date = null;
-        try{
-            date = sdf1.parse(dtc);
-            String newDate = sdf2.format(date);
-            Log.v("date",date+"");
-            System.out.println(newDate);
-            Log.e("Date",newDate);
+        try
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            Date past = format.parse(dtc);
+            Date now = new Date();
+            long seconds= TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days1=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            if(seconds<60)
+            {
+                holder.time.setText(seconds+" sec ago");
+
+            }
+            else if(minutes<60)
+            {
+                holder.time.setText(minutes+" min ago");
+            }
+            else if(hours<24)
+            {
+                holder.time.setText(hours+" hours ago");
+            }
+            else
+            {
+                holder.time.setText(days1+" days ago");
+            }
         }
-        Calendar thatDay = Calendar.getInstance();
-        thatDay.setTime(date);
-        long today = System.currentTimeMillis();
+        catch (Exception j){
+            j.printStackTrace();
+        }
 
-        long diff = today - thatDay.getTimeInMillis();
-        long days = diff/(24*60*60*1000);
-
-        holder.time.setText(days+ " Days ago");
-        //holder.fullDescription.setText(newsFeedStatus.);
         holder.likelist.setText(newsFeedStatus.getLike()+" Like");
 
         holder.comments.setText(commentsCount+" Comment");

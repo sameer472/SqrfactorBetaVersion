@@ -39,11 +39,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
         ChatFriends chatFriend = chatFriends.get(position);
 
-
-
-        //if(chatFriend.getUserName().equals())
-
-        //Log.v("DATattatatata",chatFriend.getName()+" "+chatFriend.getUserName());
         String name=chatFriend.getName();
         if(name.equals("null"))
         {

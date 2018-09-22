@@ -47,6 +47,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -169,30 +170,37 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHo
 
 
         String dtc = profileClass.getTime();
-        // Log.v("dtc",dtc);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM",Locale.ENGLISH);
-        Log.v("sdf1",sdf1.toString());
-        Log.v("sdf2",sdf2.toLocalizedPattern());
-        Date date = null;
-        try{
-            date = sdf1.parse(dtc);
-            String newDate = sdf2.format(date);
-            Log.v("date",date+"");
-            System.out.println(newDate);
-            Log.e("Date",newDate);
+        try
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            Date past = format.parse(dtc);
+            Date now = new Date();
+            long seconds= TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            if(seconds<60)
+            {
+                holder.postTime.setText(seconds+" sec ago");
+
+            }
+            else if(minutes<60)
+            {
+                holder.postTime.setText(minutes+" min ago");
+            }
+            else if(hours<24)
+            {
+                holder.postTime.setText(hours+" hours ago");
+            }
+            else
+            {
+                holder.postTime.setText(days+" days ago");
+            }
         }
-        Calendar thatDay = Calendar.getInstance();
-        thatDay.setTime(date);
-        long today = System.currentTimeMillis();
-
-        long diff = today - thatDay.getTimeInMillis();
-        long days = diff/(24*60*60*1000);
-
-        holder.postTime.setText(days+ " Days ago");
+        catch (Exception j){
+            j.printStackTrace();
+        }
         //holder.fullDescription.setText(profileClass.);
         holder.buttonLikeList.setText(profileClass.getLike()+" Like");
         holder.buttonLikeList.setOnClickListener(new View.OnClickListener() {

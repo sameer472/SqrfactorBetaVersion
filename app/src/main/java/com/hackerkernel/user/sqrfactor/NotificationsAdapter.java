@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -93,7 +94,14 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
         if (notificationsClass.getType().equals("App\\Notifications\\LikeNoti_Comment")){
             holder.notificationLine.setText("Liked your comment");
         }
-        holder.name.setText(notificationsClass.getName());
+        if(notificationsClass.getName().equals("null"))
+        {
+            holder.name.setText(notificationsClass.getFirst_name()+" "+notificationsClass.getLast_name());
+        }
+        else {
+            holder.name.setText(notificationsClass.getName());
+        }
+
 //        if(notificationsClass.getType().equals("status"))
 //        {
 //            Log.v("status1",notificationsClass.getType());
@@ -115,25 +123,38 @@ public class NotificationsAdapter extends RecyclerView.Adapter<NotificationsAdap
 //        }
         holder.description.setText(notificationsClass.getTitle());
         String dtc = notificationsClass.getTime();
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM",Locale.ENGLISH);
-        Date date = null;
-        try{
-            date = sdf1.parse(dtc);
-            String newDate = sdf2.format(date);
-            System.out.println(newDate);
-            Log.e("Date",newDate);
+        try
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            Date past = format.parse(dtc);
+            Date now = new Date();
+            long seconds= TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+            if(seconds<60)
+            {
+                holder.time.setText(seconds+" sec ago");
+
+            }
+            else if(minutes<60)
+            {
+                holder.time.setText(minutes+" min ago");
+            }
+            else if(hours<24)
+            {
+                holder.time.setText(hours+" hours ago");
+            }
+            else
+            {
+                holder.time.setText(days+" days ago");
+            }
         }
-        Calendar thatDay = Calendar.getInstance();
-        thatDay.setTime(date);
-        long today = System.currentTimeMillis();
+        catch (Exception j){
+            j.printStackTrace();
+        }
 
-        long diff = today - thatDay.getTimeInMillis();
-        long days = diff/(24*60*60*1000);
-        holder.time.setText(days+ "2 days ago");
 
         Glide.with(context).load("https://archsqr.in/"+notificationsClass.getProfile())
                 .into(holder.profile);

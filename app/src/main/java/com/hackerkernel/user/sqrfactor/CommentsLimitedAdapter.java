@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.text.ParseException;
@@ -40,6 +41,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -50,24 +52,12 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
     private int flag=0,user_id,commentable_id,postId;
     private String isShared;
 
-//    public CommentsLimitedAdapter(ArrayList<comments_limited> comments_limitedArrayList, Context context,int user_id,int commentable_id,int postId,String isShared) {
-//
-//        this.comments_limitedArrayList = comments_limitedArrayList;
-//        this.context = context;
-//        this.isShared=isShared;
-//        this.commentable_id=commentable_id;
-//        this.postId=postId;
-//        this.user_id=user_id;
-//    }
 
     public CommentsLimitedAdapter(ArrayList<comments_list> comments_limitedArrayList, Context context) {
 
         this.comments_limitedArrayList = comments_limitedArrayList;
         this.context = context;
-//        this.isShared=isShared;
-//        this.commentable_id=commentable_id;
-//        this.postId=postId;
-//        this.user_id=user_id;
+
     }
 
 
@@ -94,26 +84,7 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
 
 
         holder.commentBody.setText(comments_limitedArrayList.get(position).getBody());
-//        holder.buttonLike.setOnClickListener(new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.M)
-//            @Override
-//            public void onClick(View v) {
-//                if (flag == 0) {
-//                    holder.buttonLike.setTextColor(context.getColor(R.color.sqr));
-//                    int result = comments_limitedArrayList.get(position).getCommentLikeCount()+1;
-//                    holder.numberOfLikes.setText(result+" Like");
-//                    flag = 1;
-//                }
-//                else {
-//                    holder.buttonLike.setTextColor(context.getColor(R.color.gray));
-//                    int result = comments_limitedArrayList.get(position).getCommentLikeCount();
-//                    holder.numberOfLikes.setText(result+" Like");
-//                    flag = 0;
-//                }
-//
-//            }
-//        });
-        //holder.commenterUser.setText(comments_limitedArrayList.get(position).getUserClass().getUser_name());
+
 
         Glide.with(context).
                 load("https://archsqr.in/"+commentsList.getFrom_user_profile())
@@ -132,29 +103,173 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
         });
        holder.numberOfLikes.setText(commentsList.getCommentLikeCount()+"");
         String dtc = commentsList.getComment_date();
-        Log.v("dtc",dtc);
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
-        SimpleDateFormat sdf2 = new SimpleDateFormat("dd MMMM",Locale.ENGLISH);
-        Log.v("sdf1",sdf1.toString());
-        Log.v("sdf2",sdf2.toLocalizedPattern());
-        Date date = null;
-        try{
-            date = sdf1.parse(dtc);
-            String newDate = sdf2.format(date);
-            Log.v("date",date+"");
-            System.out.println(newDate);
-            Log.e("Date",newDate);
 
-        } catch (ParseException e) {
-            e.printStackTrace();
+        try
+        {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
+            Date past = format.parse(dtc);
+            Date now = new Date();
+            long seconds= TimeUnit.MILLISECONDS.toSeconds(now.getTime() - past.getTime());
+            long minutes=TimeUnit.MILLISECONDS.toMinutes(now.getTime() - past.getTime());
+            long hours=TimeUnit.MILLISECONDS.toHours(now.getTime() - past.getTime());
+            long days1=TimeUnit.MILLISECONDS.toDays(now.getTime() - past.getTime());
+
+            if(seconds<60)
+            {
+                holder.timeAgo.setText(seconds+" sec ago");
+
+            }
+            else if(minutes<60)
+            {
+                holder.timeAgo.setText(minutes+" min ago");
+            }
+            else if(hours<24)
+            {
+                holder.timeAgo.setText(hours+" hours ago");
+            }
+            else
+            {
+                holder.timeAgo.setText(days1+" days ago");
+            }
         }
-        Calendar thatDay = Calendar.getInstance();
-        thatDay.setTime(date);
-        long today = System.currentTimeMillis();
+        catch (Exception j){
+            j.printStackTrace();
+        }
 
-        long diff = today - thatDay.getTimeInMillis();
-        long days = diff/(24*60*60*1000);
-        holder.timeAgo.setText(days+" Days ago");
+//        holder.commentLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.M)
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//
+//                if (isChecked) {
+//                    Toast.makeText(context, "checked", Toast.LENGTH_SHORT).show();
+//                   // int likeCount=Integer.parseInt(commentsList.getLike());
+////                        DrawableCompat.setTint(like.getDrawable(), ContextCompat.getColor(context,R.color.sqr));
+//                    holder..setTextColor(context.getColor(R.color.sqr));
+//                    if(isAlreadyLikedFinal==1)
+//                        holder.likelist.setText(likeCount+" Like");
+//                    else
+//                    {
+//                        likeCount=likeCount+1;
+//                        holder.likelist.setText(likeCount+" Like");
+//                    }
+//
+//                    database= FirebaseDatabase.getInstance();
+//                    ref = database.getReference();
+//                    SharedPreferences mPrefs =context.getSharedPreferences("User",MODE_PRIVATE);
+//                    Gson gson = new Gson();
+//                    String json = mPrefs.getString("MyObject", "");
+//                    UserClass userClass = gson.fromJson(json, UserClass.class);
+//
+//                    Log.v("daattataatat",userClass.getUserId()+" "+userClass.getProfile()+" ");
+//                    if(newsFeedStatus.getType().equals("status")&& userClass.getUserId()!=newsFeedStatus.getUserId())
+//                    {
+//                        PushNotificationClass pushNotificationClass;
+//                        from_user fromUser;
+//                        post post1=new post(newsFeedStatus.getFullDescription(),newsFeedStatus.getSlug(),"post Title",newsFeedStatus.getType(),newsFeedStatus.getPostId());
+//                        if(userClass.getName()!="null")
+//                        {
+//                            fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+//                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+//                        }
+//                        else
+//                        {
+//                            fromUser=new from_user(userClass.getEmail(),userClass.getFirst_name()+" "+userClass.getLast_name(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+//                            pushNotificationClass=new PushNotificationClass(userClass.getFirst_name()+" "+userClass.getLast_name()+" liked your status ",new Date().getTime(),fromUser,post1,"like_post");
+//                        }
+//
+//                        String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
+//                        ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
+//                        Map<String,String> unred=new HashMap<>();
+//                        unred.put("unread",key);
+//                        ref.child("notification").child(newsFeedStatus.getUserId()+"").child("unread").child(key).setValue(unred);
+//                    }
+//                    else if(userClass.getUserId()!=newsFeedStatus.getUserId())
+//                    {
+//                        from_user fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+//                        post post1=new post(newsFeedStatus.getShortDescription(),newsFeedStatus.getSlug(),newsFeedStatus.getPostTitle(),newsFeedStatus.getType(),newsFeedStatus.getPostId());
+//                        PushNotificationClass pushNotificationClass;
+//                        if(userClass.getName().equals("null"))
+//                        {
+//                            pushNotificationClass=new PushNotificationClass(userClass.getUser_name()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+//                        }
+//                        else
+//                        {
+//                            pushNotificationClass=new PushNotificationClass(userClass.getName()+" liked your article ",new Date().getTime(),fromUser,post1,"like_post");
+//                        }
+//
+//                        //=new PushNotificationClass(userClass.getUser_name()+" liked your article",new Date().getTime(),fromUser,post1,"like_post");
+//                        String key =ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").push().getKey();
+//                        ref.child("notification").child(newsFeedStatus.getUserId()+"").child("all").child(key).setValue(pushNotificationClass);
+//                        Map<String,String> unred=new HashMap<>();
+//                        unred.put("unread",key);
+//                        ref.child("notification").child(newsFeedStatus.getUserId()+"").child("unread").child(key).setValue(unred);
+//
+//                    }
+//                }
+//                else {
+//
+//                    if(isAlreadyLikedFinal==1)
+//                    {
+//                        Log.v("isAlreadyLiked1",isAlreadyLikedFinal+" ");
+//                        holder.likelist.setTextColor(context.getColor(R.color.gray));
+//                        int likeCount1=Integer.parseInt(newsFeedStatus.getLike());
+//                        Toast.makeText(context, "Unchecked1", Toast.LENGTH_SHORT).show();
+//                        likeCount1=likeCount1-1;
+//                        holder.likelist.setText(likeCount1+" Like");
+//                    }
+//                    else
+//                    {
+//                        Log.v("isAlreadyLiked2",isAlreadyLikedFinal+" ");
+//                        Toast.makeText(context, "Unchecked2", Toast.LENGTH_SHORT).show();
+//                        holder.likelist.setTextColor(context.getColor(R.color.gray));
+//                        holder.likelist.setText(newsFeedStatus.getLike()+" Like");
+//                    }
+//
+//
+//                }
+//                RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+//                StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://archsqr.in/api/like_post",
+//                        new Response.Listener<String>() {
+//                            @Override
+//                            public void onResponse(String s) {
+//                                Log.v("ResponseLike",s);
+//
+//
+//                            }
+//                        },
+//                        new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError volleyError) {
+//
+//                            }
+//                        }){
+//                    @Override
+//                    public Map<String, String> getHeaders() throws AuthFailureError {
+//                        Map<String, String> params = new HashMap<String, String>();
+//                        params.put("Accept", "application/json");
+//                        params.put("Authorization", "Bearer " +TokenClass.Token);
+//
+//                        return params;
+//                    }
+//                    @Override
+//                    protected Map<String, String> getParams() throws AuthFailureError {
+//                        Map<String,String> params = new HashMap<>();
+//
+//                        params.put("likeable_id",newsFeedStatus.getSharedId()+"");
+//                        params.put("likeable_type","users_post_share");
+////
+//                        return params;
+//                    }
+//                };
+//
+//                requestQueue.add(stringRequest);
+//            }
+//
+//
+//        });
+
+
 
     }
     public void DeletePost(final int id, int comment_id)
@@ -184,9 +299,6 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String,String> params = new HashMap<>();
-//                params.put("id",id);
-//                params.put("is_shared",is_shared+"");
-//
                 return params;
             }
         };
@@ -205,7 +317,7 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView commentBody,commenterUserName,timeAgo,numberOfLikes;
         ImageView commenterProfile,comment_menu;
-        Button buttonLike;
+        CheckBox commentLike;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -214,7 +326,7 @@ public class CommentsLimitedAdapter extends RecyclerView.Adapter<CommentsLimited
             timeAgo=(TextView)itemView.findViewById(R.id.timeAgo);
             comment_menu=(ImageView)itemView.findViewById(R.id.comment_menu);
             commenterProfile=(ImageView)itemView.findViewById(R.id.commenterProfileImage);
-            buttonLike=(Button)itemView.findViewById(R.id.commentLike);
+            commentLike=(CheckBox) itemView.findViewById(R.id.commentLike);
             numberOfLikes=(TextView)itemView.findViewById(R.id.numberOfLike);
             comment_menu.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -13,7 +13,7 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class NotificationClass implements Serializable {
-    public String type, time, user_name,name, profile, body,postType,title,description,shortDescription,slug;
+    public String type, time, user_name,name, profile, body,postType,title,description,shortDescription,slug,first_name,last_name;
     public int postId, userId, commentID, commentType;
     public JSONObject jsonObject;
 
@@ -47,7 +47,10 @@ public class NotificationClass implements Serializable {
 
             JSONObject userfrom = jsonObject.getJSONObject("user_from");
             this.name = userfrom.getString("name");
+            this.first_name = userfrom.getString("first_name");
+            this.last_name = userfrom.getString("last_name");
             this.user_name = userfrom.getString("user_name");
+
             this.profile = userfrom.getString("profile");
 
 
@@ -68,6 +71,23 @@ public class NotificationClass implements Serializable {
         }
 
     }
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getLast_name() {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
     public String getType() {
         return type;
     }

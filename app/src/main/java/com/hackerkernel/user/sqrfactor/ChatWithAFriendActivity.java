@@ -70,6 +70,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
     private String isOnline;
     private  String nextPageUrl;
     private UserClass userClass;
+    private int loadCount=0;
 
 
 
@@ -133,8 +134,6 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
         chatWithAFriendActivityAdapter = new ChatWithAFriendActivityAdapter(messageClassArrayList, this, id, friendProfile, friendName);
         recycler.setAdapter(chatWithAFriendActivityAdapter);
         bottom_arrow=(ImageView)findViewById(R.id.bottom_arrow);
-
-
 
         StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/myallMSG/getChat/" + id,
                 new Response.Listener<String>() {
@@ -271,6 +270,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        loadCount=0;
 
     }
 
@@ -347,27 +347,26 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
     }
 
-    public void FirebaseListner()
-    {
 
 
-           ref.child("Chats").child(MessageFragment.userId+"").addValueEventListener(new ValueEventListener() {
+    public void FirebaseListner() {
+
+            ref.child("Chats").child(userClass.getUserId() + "").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
                     LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
-                    if(lastMessage!=null && id==lastMessage.getSenderId())
-                    {
+                    if (loadCount!=0 && lastMessage != null && id == lastMessage.getSenderId()) {
+
 
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
 
 
-                        if(messageClassArrayList.size()!=0)
-                        {
-                            messageClass=
-                                    new MessageClass(messageClassArrayList.get(messageClassArrayList.size()-1).getMessageId()+1,id,MessageFragment.userId,lastMessage.getMessage(),"1",formatter.format(date),formatter.format(date));
+                        if (messageClassArrayList.size() != 0) {
+                            messageClass =
+                                    new MessageClass(messageClassArrayList.get(messageClassArrayList.size() - 1).getMessageId() + 1, id, userClass.getUserId(), lastMessage.getMessage(), "1", formatter.format(date), formatter.format(date));
 
                         }
 
@@ -376,16 +375,19 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                recycler.smoothScrollToPosition(messageClassArrayList.size()-1);
+                                recycler.smoothScrollToPosition(messageClassArrayList.size() - 1);
                             }
                         }, 1);
 
 
-
-                      //  Toast.makeText(ChatWithAFriendActivity.this,"MessageFromServer"+lastMessage.getMessage(),Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(ChatWithAFriendActivity.this,"MessageFromServer"+lastMessage.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        loadCount=1;
                     }
 
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -393,6 +395,9 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
             });
 
         }
+
+
+
 
 
     public  void SendMessageToServer()
@@ -410,7 +415,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                         MessageClass messageClass=
-                                new MessageClass(messageClassArrayList.get(messageClassArrayList.size()-1).getMessageId()+1,MessageFragment.userId,id,messageToSend.getText().toString(),"1",formatter.format(date),formatter.format(date));
+                                new MessageClass(messageClassArrayList.get(messageClassArrayList.size()-1).getMessageId()+1,userClass.getUserId(),id,messageToSend.getText().toString(),"1",formatter.format(date),formatter.format(date));
 
                         messageClassArrayList.add(messageClass);
                         messageToSend.setText("");
@@ -444,7 +449,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("userId",MessageFragment.userId+"");
+                params.put("userId",userClass.getUserId()+"");
                 params.put("friendId",id+"" );
                 params.put("message",messageToSend.getText().toString() );
 
@@ -462,15 +467,6 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
         requestQueue.add(myReq);
 
-    }
-    public void loadNextDataFromApi(int offset) {
-
-        fetchMoreChatDataFromServer();
-        // Send an API request to retrieve appropriate paginated data
-        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
-        //  --> Deserialize and construct new model objects from the API response
-        //  --> Append the new data objects to the existing set of items inside the array of items
-        //  --> Notify the adapter of the new items made with `notifyItemRangeInserted()`
     }
 
 }
