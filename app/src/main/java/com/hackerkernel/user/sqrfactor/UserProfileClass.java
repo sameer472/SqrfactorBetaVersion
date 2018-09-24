@@ -89,11 +89,6 @@ public class UserProfileClass {
             this.mobile_number = user.getString("mobile_number");
             this.name = user.getString("name");
             JSONObject jsonPost = jsonObject.getJSONObject("posts");
-            if(jsonObject.has("message")){
-
-            }
-            else {
-                //JSONObject jsonPost = jsonObject.getJSONObject("posts");
                 if (jsonPost != null) {
                     JSONArray jsonArrayData = jsonPost.getJSONArray("data");
                     for (int i = 0; i < jsonArrayData.length(); i++) {
@@ -129,7 +124,7 @@ public class UserProfileClass {
 
                     }
                 }
-            }
+
 
         } catch(JSONException e){
             e.printStackTrace();

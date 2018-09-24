@@ -17,6 +17,13 @@ public class PushNotificationClass implements Serializable {
         this.type = type;
 
     }
+    public PushNotificationClass(String body, long created_at, from_user from_user ,String type) {
+        this.body = body;
+        this.created_at = created_at;
+        this.from_user=from_user;
+        this.type = type;
+
+    }
 
     public com.hackerkernel.user.sqrfactor.post getPost() {
         return post;

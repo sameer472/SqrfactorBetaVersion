@@ -95,6 +95,7 @@ public class HomeScreen extends ToolbarActivity {
     private RecyclerView recyclerView;
     BadgeView badge7;
     View v;
+    private SharedPreferences sp;
     private FragmentTabHost mTabHost;
     static int count1;
     private UserClass userClass;
@@ -113,6 +114,7 @@ public class HomeScreen extends ToolbarActivity {
         ActionBar actionBar = getSupportActionBar();
 //        actionBar.setLogo(R.drawable.profilepic);
         actionBar.setDisplayShowTitleEnabled(false);
+        sp = getSharedPreferences("login",MODE_PRIVATE);
 
         final SharedPreferences mPrefs = getSharedPreferences("User", MODE_PRIVATE);
         Gson gson = new Gson();
@@ -203,11 +205,11 @@ public class HomeScreen extends ToolbarActivity {
                         tab.setIcon(R.drawable.chatmsgcolor);
                         getSupportFragmentManager().beginTransaction().replace(R.id.mainfrag, new MessageFragment()).commit();
 
-                        if(tab.getCustomView()!=null)
-                            v = tab.getCustomView().findViewById(R.id.badgeCotainer);
-                        if(v != null) {
-                            v.setVisibility(View.GONE);
-                        }
+//                        if(tab.getCustomView()!=null)
+//                            v = tab.getCustomView().findViewById(R.id.badgeCotainer);
+//                        if(v != null) {
+//                            v.setVisibility(View.GONE);
+//                        }
                         break;
 
                     case 2:
@@ -296,6 +298,8 @@ public class HomeScreen extends ToolbarActivity {
 
 //
 //                    //call api here for logout
+
+                    sp.edit().putBoolean("logged",false).apply();
 //
                     SharedPreferences mPrefs = getSharedPreferences("User", MODE_PRIVATE);
                     Gson gson = new Gson();
@@ -554,6 +558,15 @@ public class HomeScreen extends ToolbarActivity {
                                     v.setVisibility(View.VISIBLE);
                                 }
                             }
+                        }
+                        else {
+                            TabLayout.Tab tab1 = tabLayout.getTabAt(1);
+                            View  v=null;
+                            if(tab1.getCustomView()!=null)
+                                 v = tab1.getCustomView().findViewById(R.id.badgeCotainer);
+                        if(v != null) {
+                            v.setVisibility(View.GONE);
+                        }
                         }
                     }
 

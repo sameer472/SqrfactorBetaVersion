@@ -84,7 +84,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void SendNotification(String profileUrl, String postTitle, String postType, String userName, String type)
     {
-        Intent intent=new Intent(getApplicationContext(),NotificationsActivity.class);
+        Intent intent=new Intent(getApplicationContext(),HomeScreen.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
         Uri defaultUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);

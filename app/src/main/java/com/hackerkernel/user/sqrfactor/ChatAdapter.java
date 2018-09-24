@@ -52,14 +52,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 .into(holder.frndProfile);
         holder.chatMessage.setText(chatFriend.getChat());
 
-
-        if(chatFriend.getUnread_count()!=0)
+//
+        if(!chatFriend.getUnread_count().equals("0"))
         {
             Log.v("count",chatFriend.getUnread_count()+"");
-            holder.unreadCount.setText(chatFriend.getUnread_count()+"");
+            holder.unreadCount.setText(chatFriend.getUnread_count());
             holder.unreadCount.setVisibility(View.VISIBLE);
         }
-
+//        holder.unreadCount.setText(chatFriend.getUnread_count()+"");
+//        holder.unreadCount.setVisibility(View.VISIBLE);
 
 
         if(chatFriend.getIsOnline().equals("True"))
@@ -75,6 +76,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
 
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        return position;
+//    }
 
     @Override
     public int getItemCount() {

@@ -3,6 +3,7 @@ package com.hackerkernel.user.sqrfactor;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,13 +81,14 @@ public class MessageFragment extends Fragment {
         SharedPreferences mPrefs =getActivity().getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("MyObject", "");
-         userClass = gson.fromJson(json, UserClass.class);
+        userClass = gson.fromJson(json, UserClass.class);
         //String token_id=FirebaseInstanceId.getInstance().getToken();
 
 
         if(savedInstanceState==null)
         {
            getAllFriendsList();
+            HomeScreen.getUnReadMsgCount();
         }
 
         else {
@@ -103,10 +105,7 @@ public class MessageFragment extends Fragment {
 
                 HomeScreen.getnotificationCount();
 
-
-
-
-            }
+                }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -116,7 +115,7 @@ public class MessageFragment extends Fragment {
         ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Toast.makeText(getContext(), "chat Listing", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "chat Listing", Toast.LENGTH_SHORT).show();
                 LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
                 int index=getIndexByProperty(lastMessage.getSenderId());
                 getAllFriendsList();
@@ -140,9 +139,24 @@ public class MessageFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getAllFriendsList();
+                HomeScreen.getUnReadMsgCount();
+            }
+        }, 1000);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        getAllFriendsList();
+        //getAllFriendsList();
     }
 
     private void getAllFriendsList() {
@@ -156,13 +170,6 @@ public class MessageFragment extends Fragment {
                         Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            //JSONObject user=jsonObject.getJSONObject("user");
-
-                            //CurrentLoginedUser currentLoginedUser=new CurrentLoginedUser(userId,userName,userProfile);
-//                            userProfile=userClass.getProfile();//user.getString("profile");
-//                            userName=userClass.getName();//user.getString("name");
-//                            userId=userClass.getUserId();//user.getInt("id");
-
                             JSONArray jsonArrayData = jsonObject.getJSONArray("friends");
                             if (chatFriends!=null)
                             {

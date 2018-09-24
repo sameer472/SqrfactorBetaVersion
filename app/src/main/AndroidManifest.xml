@@ -20,7 +20,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity" />
-        <activity android:name=".LoginScreen" />
+
+        <activity android:name=".LoginScreen">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
@@ -32,13 +38,11 @@
 
         <activity
             android:name=".HomeScreen"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Index">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustPan">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        </activity>
+        <activity android:name=".Index">
+
         </activity>
         <activity
             android:name=".RedActivity"

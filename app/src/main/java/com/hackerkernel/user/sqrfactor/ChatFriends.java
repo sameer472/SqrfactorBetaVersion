@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import java.io.Serializable;
 
 public class ChatFriends implements Serializable {
-    public String userName,userProfile,name,first_name,last_name;
-    public int userID,unread_count;
+    public String userName,userProfile,name,first_name,last_name,unread_count;
+    public int userID;
     public transient JSONObject jsonObject=null;
     public String isOnline;
     public String lastSeen;
@@ -43,7 +43,7 @@ public class ChatFriends implements Serializable {
             this.status=last_message.getString("status");
             this.created_at=last_message.getString("created_at");
 
-            this.unread_count=jsonObject.getInt("unread_count");
+            this.unread_count=jsonObject.getString("unread_count");
 
 
 
@@ -73,11 +73,11 @@ public class ChatFriends implements Serializable {
         this.last_name = last_name;
     }
 
-    public int getUnread_count() {
+    public String getUnread_count() {
         return unread_count;
     }
 
-    public void setUnread_count(int unread_count) {
+    public void setUnread_count(String unread_count) {
         this.unread_count = unread_count;
     }
 

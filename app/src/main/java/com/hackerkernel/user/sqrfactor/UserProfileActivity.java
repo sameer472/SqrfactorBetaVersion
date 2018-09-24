@@ -217,7 +217,7 @@ public class UserProfileActivity extends AppCompatActivity {
             }
         });
         FollowMethod();
-       // LoadData();
+        LoadData();
 
     }
 
@@ -244,11 +244,11 @@ public class UserProfileActivity extends AppCompatActivity {
                                 flag = false;
                             }
 
-                            if (count==0)
-                            {
-                                count=1;
-                                LoadData();
-                            }
+//                            if (count==0)
+//                            {
+//                                count=1;
+//                                LoadData();
+//                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -289,10 +289,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
     public void LoadData() {
 
-        RequestQueue requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+        RequestQueue requestQueue2 = Volley.newRequestQueue(getApplicationContext());
         if(userProfileClassArrayList!=null)
             userProfileClassArrayList.clear();
-        Toast.makeText(UserProfileActivity.this, "calling", Toast.LENGTH_LONG).show();
+
 
         //https://archsqr.in/api/profile/detail/Shivani2292
         StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/profile/detail/" + profileNameOfUser,
@@ -300,6 +300,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.v("MorenewsFeedFromServer", response);
+                        Toast.makeText(UserProfileActivity.this, response, Toast.LENGTH_LONG).show();
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
@@ -311,10 +312,16 @@ public class UserProfileActivity extends AppCompatActivity {
                             userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
                             Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
                                     .into(userProfileImage);
+                            JSONObject jsonPost = jsonObject.getJSONObject("posts");
+                            UserProfileClass userProfileClass=null;
+                            if(jsonPost!=null)
+                            {
+                                userProfileClass= new UserProfileClass(jsonObject);
+                                userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
+                                userProfileAdapter.notifyDataSetChanged();
+                            }
 
-                            UserProfileClass userProfileClass = new UserProfileClass(jsonObject);
-                            userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
-                            userProfileAdapter.notifyDataSetChanged();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -354,7 +361,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
         };
 
-        requestQueue.add(myReq);
+        requestQueue2.add(myReq);
 
     }
 

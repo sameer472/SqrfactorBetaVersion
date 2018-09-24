@@ -54,6 +54,7 @@ public class LoginFragment extends Fragment {
     private String username, password;
     private Button login;
     private TextView forgot;
+    private SharedPreferences sp;
     private EditText loginEmail, loginPassword;
     private CheckBox loginRemberMe;
     private SharedPreferences.Editor editor;
@@ -75,6 +76,7 @@ public class LoginFragment extends Fragment {
         database= FirebaseDatabase.getInstance();
 
         ref = database.getReference();
+        sp = getActivity().getSharedPreferences("login",MODE_PRIVATE);
 
         login = (Button) rootView.findViewById(R.id.login);
         forgot = (TextView) rootView.findViewById(R.id.forgot);
@@ -103,6 +105,9 @@ public class LoginFragment extends Fragment {
 
                 username = loginEmail.getText().toString();
                 password = loginPassword.getText().toString();
+
+
+                sp.edit().putBoolean("logged",true).apply();
 
                 if (loginRemberMe.isChecked()) {
                     loginPrefsEditor.putBoolean("saveLogin", true);

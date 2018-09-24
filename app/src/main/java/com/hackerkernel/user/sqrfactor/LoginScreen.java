@@ -1,5 +1,7 @@
 package com.hackerkernel.user.sqrfactor;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -14,6 +16,20 @@ public class LoginScreen extends AppCompatActivity {
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
     private Toolbar toolbar;
+    private SharedPreferences sp;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        sp = getSharedPreferences("login",MODE_PRIVATE);
+        if(sp.getBoolean("logged",false)){
+            goToMainActivity();
+        }
+    }
+    public void goToMainActivity(){
+        Intent i = new Intent(this,HomeScreen.class);
+        startActivity(i);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override

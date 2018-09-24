@@ -131,7 +131,7 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recycler.setLayoutManager(layoutManager);
-        chatWithAFriendActivityAdapter = new ChatWithAFriendActivityAdapter(messageClassArrayList, this, id, friendProfile, friendName);
+        chatWithAFriendActivityAdapter = new ChatWithAFriendActivityAdapter(messageClassArrayList, getApplicationContext(), id, friendProfile, friendName);
         recycler.setAdapter(chatWithAFriendActivityAdapter);
         bottom_arrow=(ImageView)findViewById(R.id.bottom_arrow);
 
