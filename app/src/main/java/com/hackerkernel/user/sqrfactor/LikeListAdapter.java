@@ -117,9 +117,11 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.MyView
 
                                         PushNotificationClass pushNotificationClass;
                                         from_user fromUser;
+                                        //post post1=new post(""," "," "," ",1);
                                         if(userClass.getName()!="null")
                                         {
                                             fromUser=new from_user(userClass.getEmail(),userClass.getName(),userClass.getUserId(),userClass.getUser_name(),userClass.getProfile());
+
                                             pushNotificationClass=new PushNotificationClass(userClass.getName()+" started following you ",new Date().getTime(),fromUser,"follow");
                                         }
                                         else

@@ -293,35 +293,44 @@ public class UserProfileActivity extends AppCompatActivity {
         if(userProfileClassArrayList!=null)
             userProfileClassArrayList.clear();
 
-
+        Log.v("username", profileNameOfUser);
         //https://archsqr.in/api/profile/detail/Shivani2292
-        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/profile/detail/" + profileNameOfUser,
+        //https://archsqr.in/profile/detail/Sarvagnee
+        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/profile/detail/" + profileNameOfUser,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.v("MorenewsFeedFromServer", response);
                         Toast.makeText(UserProfileActivity.this, response, Toast.LENGTH_LONG).show();
-
+                        Log.v("MorenewsFeedFromServer", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            followCnt.setText(jsonObject.getString("followerCnt"));
-                            followingCnt.setText(jsonObject.getString("followingCnt"));
-                            portfolioCnt.setText(jsonObject.getString("portfolioCnt"));
-                            bluePrintCnt.setText(jsonObject.getString("blueprintCnt"));
-                            nextPageUrl=jsonObject.getString("nextPage");
-                            userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
-                            Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
-                                    .into(userProfileImage);
-                            JSONObject jsonPost = jsonObject.getJSONObject("posts");
-                            UserProfileClass userProfileClass=null;
-                            if(jsonPost!=null)
-                            {
-                                userProfileClass= new UserProfileClass(jsonObject);
-                                userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
-                                userProfileAdapter.notifyDataSetChanged();
-                            }
-
-
+                            Log.v("MorenewsFeedFromServer", jsonObject.getString("blueprintCnt"));
+                            Log.v("MorenewsFeedFromServer1", jsonObject.getString("portfolioCnt"));
+                            Log.v("MorenewsFeedFromServer2", jsonObject.getInt("followerCnt")+"");
+                            Log.v("MorenewsFeedFromServer3", jsonObject.getString("followingCnt"));
+//
+//
+//                            //+" "+jsonObject.getString("portfolioCnt")+" "+jsonObject.getString("followerCnt")+" "+jsonObject.getString("followingCnt"));
+//
+//
+//                            followCnt.setText(jsonObject.getString("followerCnt"));
+//                            followingCnt.setText(jsonObject.getString("followingCnt"));
+//                            portfolioCnt.setText(jsonObject.getString("portfolioCnt"));
+//                            bluePrintCnt.setText(jsonObject.getString("blueprintCnt"));
+//                           // nextPageUrl=jsonObject.getString("nextPage");
+//                            userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
+////                            Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
+////                                    .into(userProfileImage);
+//                            JSONObject jsonPost = jsonObject.getJSONObject("posts");
+//                            UserProfileClass userProfileClass=null;
+//                            if(jsonPost!=null)
+//                            {
+//                                userProfileClass= new UserProfileClass(jsonObject);
+//                                userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
+//                                userProfileAdapter.notifyDataSetChanged();
+//                            }
+//                            userProfileAdapter.notifyDataSetChanged();
+////
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -337,12 +346,15 @@ public class UserProfileActivity extends AppCompatActivity {
                             try {
                                 String res = new String(response.data,
                                         HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                Toast.makeText(getApplicationContext(),res,Toast.LENGTH_LONG).show();
                                 // Now you can use any deserializer to make sense of data
                                 JSONObject obj = new JSONObject(res);
                             } catch (UnsupportedEncodingException e1) {
+                                Toast.makeText(getApplicationContext(),e1.toString(),Toast.LENGTH_LONG).show();
                                 // Couldn't properly decode data to string
                                 e1.printStackTrace();
                             } catch (JSONException e2) {
+                                Toast.makeText(getApplicationContext(),e2.toString(),Toast.LENGTH_LONG).show();
                                 // returned data is not JSONObject?
                                 e2.printStackTrace();
                             }
@@ -356,6 +368,13 @@ public class UserProfileActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("Accept", "application/json");
                 params.put("Authorization", "Bearer " + TokenClass.Token);
+                return params;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", profileNameOfUser );
                 return params;
             }
 

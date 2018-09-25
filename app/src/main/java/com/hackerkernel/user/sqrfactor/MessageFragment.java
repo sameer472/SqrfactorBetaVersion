@@ -118,16 +118,18 @@ public class MessageFragment extends Fragment {
                 //Toast.makeText(getContext(), "chat Listing", Toast.LENGTH_SHORT).show();
                 LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
                 int index=getIndexByProperty(lastMessage.getSenderId());
+//                ChatFriends chatFriends1=null;
+//                if(index>0)
+//                {
+//                    chatFriends1 = chatFriends.get(index);
+//                    chatFriends1.setUnread_count(Integer.parseInt(chatFriends1.getUnread_count())+1+"");
+//                    chatFriends.set(index,chatFriends1 );
+//                    chatAdapter.notifyItemChanged(index);
+//                }
+
                 getAllFriendsList();
-
-//                ChatFriends chatFriend=chatFriends.get(index);
-//                //chatFriend.se
-//                chatFriends.set(index, newValue);
-//                chatAdapter.notifyItemChanged(index);
-               // HomeScreen.getUnReadMsgCount();
-
-
-            }
+                HomeScreen.getUnReadMsgCount();
+                }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
