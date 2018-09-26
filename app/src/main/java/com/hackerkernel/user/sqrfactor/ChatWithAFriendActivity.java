@@ -372,8 +372,6 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
     }
 
-
-
     public void FirebaseListner() {
 
             ref.child("Chats").child(userClass.getUserId() + "").addValueEventListener(new ValueEventListener() {

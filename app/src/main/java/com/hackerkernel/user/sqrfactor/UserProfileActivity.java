@@ -3,8 +3,11 @@ package com.hackerkernel.user.sqrfactor;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.ContactsContract;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
@@ -37,7 +40,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,7 +72,16 @@ public class UserProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
 
+//        if (SDK_INT > 8)
+//        {
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                    .permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//            //your codes here
+//
+//        }
         context=getApplicationContext();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -240,7 +254,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 }
             }
         });
-        FollowMethod();
+        //FollowMethod();
         LoadData();
 
     }
@@ -328,33 +342,39 @@ public class UserProfileActivity extends AppCompatActivity {
                         Log.v("MorenewsFeedFromServer", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            Log.v("MorenewsFeedFromServer", jsonObject.getString("blueprintCnt"));
-                            Log.v("MorenewsFeedFromServer1", jsonObject.getString("portfolioCnt"));
-                            Log.v("MorenewsFeedFromServer2", jsonObject.getInt("followerCnt")+"");
-                            Log.v("MorenewsFeedFromServer3", jsonObject.getString("followingCnt"));
-//
-//
-//                            //+" "+jsonObject.getString("portfolioCnt")+" "+jsonObject.getString("followerCnt")+" "+jsonObject.getString("followingCnt"));
-//
-//
+
                             followCnt.setText(jsonObject.getString("followerCnt"));
                             followingCnt.setText(jsonObject.getString("followingCnt"));
                             portfolioCnt.setText(jsonObject.getString("portfolioCnt"));
                             bluePrintCnt.setText(jsonObject.getString("blueprintCnt"));
-                            nextPageUrl=jsonObject.getString("nextPage");
                             userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
+                            followbtn.setText(jsonObject.getString("isfollowing"));
 
-                            Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
-                                    .into(userProfileImage);
+                            URL img_value = null;
+                            Bitmap mIcon1 = null;
+                            if(jsonObject.has("message") && jsonObject.getString("message").equals("No"))
+                            {
+
+                                Glide.with(getApplicationContext()).load( jsonObject.getJSONObject("user").getString("profile"))
+                                        .into(userProfileImage);
+                            }
+
+                           else {
+                                Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
+                                        .into(userProfileImage);
+                            }
+
+
                             JSONObject jsonPost = jsonObject.getJSONObject("posts");
                             UserProfileClass userProfileClass=null;
                             if(jsonPost!=null)
                             {
+                                nextPageUrl=jsonObject.getString("nextPage");
                                 userProfileClass= new UserProfileClass(jsonObject);
                                 userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
                                 userProfileAdapter.notifyDataSetChanged();
                             }
-                            userProfileAdapter.notifyDataSetChanged();
+                            //userProfileAdapter.notifyDataSetChanged();
 //
                         } catch (JSONException e) {
                             e.printStackTrace();
