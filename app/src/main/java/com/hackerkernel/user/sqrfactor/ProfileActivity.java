@@ -253,9 +253,9 @@ public class ProfileActivity extends ToolbarActivity {
         SharedPreferences mPrefs =getSharedPreferences("User",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("MyObject", "");
-        UserClass userClass = gson.fromJson(json, UserClass.class);
+        final UserClass userClass = gson.fromJson(json, UserClass.class);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/profile/detail/"+userClass.getUser_name(),
+        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/profile/detail/"+userClass.getUser_name(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -301,6 +301,14 @@ public class ProfileActivity extends ToolbarActivity {
                 params.put("Accept", "application/json");
                 params.put("Authorization", "Bearer "+TokenClass.Token);
 
+                return params;
+            }
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", userClass.getUser_name() );
                 return params;
             }
 

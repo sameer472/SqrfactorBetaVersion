@@ -2,6 +2,7 @@ package com.hackerkernel.user.sqrfactor;
 
 public class LastMessage {
 
+    private int chat_id;
     private int senderId;
     private String message;
     private String senderName;
@@ -17,6 +18,14 @@ public class LastMessage {
         this.senderId = senderId;
         this.message = message;
         this.senderName=senderName;
+    }
+
+    public int getChat_id() {
+        return chat_id;
+    }
+
+    public void setChat_id(int chat_id) {
+        this.chat_id = chat_id;
     }
 
     public String getSenderName() {

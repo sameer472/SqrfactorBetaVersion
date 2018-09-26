@@ -154,30 +154,7 @@ public class NotificationsFragment extends Fragment {
         };
 
         requestQueue.add(myReq);
-        ref.child("notification").child(userClass.getUserId()+"").child("all").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                HomeScreen.getnotificationCount();
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                HomeScreen.getnotificationCount();
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         return view;
 

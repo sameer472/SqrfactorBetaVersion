@@ -24,10 +24,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.baoyz.widget.PullRefreshLayout;
@@ -42,6 +45,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,6 +56,7 @@ import java.util.Map;
 public class ChatWithAFriendActivity extends AppCompatActivity {
     static int id;
     MessageClass messageClass=null;
+    private boolean currentPage=false;
     String friendProfile, friendName;
     private ArrayList<MessageClass> messageClassArrayList = new ArrayList<>();
     private ChatWithAFriendActivityAdapter chatWithAFriendActivityAdapter;
@@ -248,19 +253,32 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
             @Override
             public void onClick(View v) {
-                //
-                SendMessageToServer();
-                final LastMessage lastMessage = new LastMessage(userClass.getUserId(), messageToSend.getText().toString(), userClass.getUser_name());
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
+
+                SendMessageToServer(messageToSend.getText().toString());
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date();
+
+
+                MessageClass messageClass=
+                        new MessageClass(messageClassArrayList.get(messageClassArrayList.size()-1).getMessageId()+1,userClass.getUserId(),id,messageToSend.getText().toString(),"1",formatter.format(date),formatter.format(date));
+
+                messageClassArrayList.add(messageClass);
+                messageToSend.setText("");
+                chatWithAFriendActivityAdapter.notifyItemInserted(messageClassArrayList.size()-1);
+                if(isVisibleBottpmArrow)
+                {
+                    isVisibleBottpmArrow=false;
+                    bottom_arrow.setVisibility(View.GONE);
+                }
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        MessageFragment.ref.child("Chats").child(id + "").setValue(lastMessage);
+                        recycler.smoothScrollToPosition(messageClassArrayList.size()-1);
                     }
-                }, 1000);
+                }, 1);
 
                 Toast.makeText(ChatWithAFriendActivity.this, "Messeage sent..", Toast.LENGTH_LONG).show();
             }
@@ -274,10 +292,18 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        currentPage=false;
+
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
+        currentPage=true;
+        loadCount=0;
 
 
     }
@@ -341,7 +367,6 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
             };
             RequestQueue requestQueue = Volley.newRequestQueue(context);
-
             requestQueue.add(myReq);
         }
 
@@ -357,13 +382,11 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
 
                     LastMessage lastMessage = dataSnapshot.getValue(LastMessage.class);
-                    if (loadCount!=0 && lastMessage != null && id == lastMessage.getSenderId()) {
+                    if ( loadCount!=0 && lastMessage != null && id == lastMessage.getSenderId()) {
 
 
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                         Date date = new Date();
-
-
                         if (messageClassArrayList.size() != 0) {
                             messageClass =
                                     new MessageClass(messageClassArrayList.get(messageClassArrayList.size() - 1).getMessageId() + 1, id, userClass.getUserId(), lastMessage.getMessage(), "1", formatter.format(date), formatter.format(date));
@@ -378,10 +401,13 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
                                 recycler.smoothScrollToPosition(messageClassArrayList.size() - 1);
                             }
                         }, 1);
+                        if(currentPage)
+                        {
+                            UpdateChatStatus(lastMessage.getChat_id());
+                        }
 
 
-                        //  Toast.makeText(ChatWithAFriendActivity.this,"MessageFromServer"+lastMessage.getMessage(),Toast.LENGTH_LONG).show();
-                    }
+                        }
                     else {
                         loadCount=1;
                     }
@@ -396,44 +422,17 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
 
         }
 
+    private void UpdateChatStatus(final int chatId) {
+        Toast.makeText(getApplicationContext(), chatId+"", Toast.LENGTH_LONG).show();
 
-
-
-
-    public  void SendMessageToServer()
-    {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/chat/sendChat"
+        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/read_status"
                 ,
                 new Response.Listener<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                     @Override
                     public void onResponse(String response) {
-                        Log.v("ReponseFeed", response);
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date date = new Date();
-
-                        Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                        MessageClass messageClass=
-                                new MessageClass(messageClassArrayList.get(messageClassArrayList.size()-1).getMessageId()+1,userClass.getUserId(),id,messageToSend.getText().toString(),"1",formatter.format(date),formatter.format(date));
-
-                        messageClassArrayList.add(messageClass);
-                        messageToSend.setText("");
-                        chatWithAFriendActivityAdapter.notifyItemInserted(messageClassArrayList.size()-1);
-                        if(isVisibleBottpmArrow)
-                        {
-                            isVisibleBottpmArrow=false;
-                            bottom_arrow.setVisibility(View.GONE);
-                        }
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                recycler.smoothScrollToPosition(messageClassArrayList.size()-1);
-                            }
-                        }, 1);
-
-
-
+                        //Log.v("ReponseFeed", response);
                     }
 
                 },
@@ -445,13 +444,79 @@ public class ChatWithAFriendActivity extends AppCompatActivity {
                     }
                 }) {
 
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("id",chatId+"");
+
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Accept", "application/json");
+                params.put("Authorization", "Bearer "+TokenClass.Token);
+                return params;
+            }
+        };
+
+        requestQueue.add(myReq);
+    }
+
+
+    private void SendMessageToServer(final String message)
+    {
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        StringRequest myReq = new StringRequest(Request.Method.POST, "https://archsqr.in/api/chat/sendChat",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //Log.v("ReponseFeed", response);
+                        Toast.makeText(getApplicationContext(), "receiving", Toast.LENGTH_LONG).show();
+
+                    }
+
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        NetworkResponse response = error.networkResponse;
+                        if (error instanceof ServerError && response != null) {
+                            try {
+
+
+                                String res = new String(response.data,
+                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                Log.v("chat",res);
+                                Toast.makeText(getApplicationContext(),res,Toast.LENGTH_LONG).show();
+                                // Now you can use any deserializer to make sense of data
+                                JSONObject obj = new JSONObject(res);
+                            } catch (UnsupportedEncodingException e1) {
+                                Toast.makeText(getApplicationContext(),e1.toString(),Toast.LENGTH_LONG).show();
+                                // Couldn't properly decode data to string
+                                e1.printStackTrace();
+                            } catch (JSONException e2) {
+                                Toast.makeText(getApplicationContext(),e2.toString(),Toast.LENGTH_LONG).show();
+                                // returned data is not JSONObject?
+                                e2.printStackTrace();
+                            }
+                        }
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                Log.v("request",userClass.getUserId()+" "+id+" " +messageToSend.getText().toString());
+
                 params.put("userId",userClass.getUserId()+"");
                 params.put("friendId",id+"" );
-                params.put("message",messageToSend.getText().toString() );
+                params.put("message",message );
 
                 return params;
             }

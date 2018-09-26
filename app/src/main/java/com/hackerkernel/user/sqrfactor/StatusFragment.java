@@ -230,8 +230,7 @@ public class StatusFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 HomeScreen.getUnReadMsgCount();
-
-            }
+                }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 

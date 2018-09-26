@@ -55,6 +55,7 @@ public class UserProfileActivity extends AppCompatActivity {
     static UserProfileAdapter userProfileAdapter;
     private static Context context;
     RecyclerView recyclerView;
+    private String friendProfileUrl;
     boolean flag = false;
     private String profileNameOfUser;
     private int user_id;
@@ -75,6 +76,7 @@ public class UserProfileActivity extends AppCompatActivity {
         Intent intent = getIntent();
         user_id = intent.getIntExtra("User_id", 0);
         profileNameOfUser = intent.getStringExtra("ProfileUserName");
+        friendProfileUrl=intent.getStringExtra("ProfileUrl");
         Toast.makeText(getApplicationContext(), user_id + " " + profileNameOfUser, Toast.LENGTH_LONG).show();
 
 
@@ -187,6 +189,28 @@ public class UserProfileActivity extends AppCompatActivity {
 
         });
 
+        messagebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(context,ChatWithAFriendActivity.class);
+                intent.putExtra("FriendId",user_id);
+                intent.putExtra("FriendName",profileNameOfUser);
+                intent.putExtra("FriendProfileUrl",friendProfileUrl);
+                intent.putExtra("isOnline","True");
+                startActivity(intent);
+
+//                    if(chatFriends.get(getAdapterPosition()).getName().equals("null"))
+//                    {
+//                        intent.putExtra("FriendName",chatFriends.get(getAdapterPosition()).getUserName());
+//                    }
+//                    else
+//                    {
+//                        intent.putExtra("FriendName",chatFriends.get(getAdapterPosition()).getName());
+//                    }
+
+            }
+        });
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -313,24 +337,25 @@ public class UserProfileActivity extends AppCompatActivity {
 //                            //+" "+jsonObject.getString("portfolioCnt")+" "+jsonObject.getString("followerCnt")+" "+jsonObject.getString("followingCnt"));
 //
 //
-//                            followCnt.setText(jsonObject.getString("followerCnt"));
-//                            followingCnt.setText(jsonObject.getString("followingCnt"));
-//                            portfolioCnt.setText(jsonObject.getString("portfolioCnt"));
-//                            bluePrintCnt.setText(jsonObject.getString("blueprintCnt"));
-//                           // nextPageUrl=jsonObject.getString("nextPage");
-//                            userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
-////                            Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
-////                                    .into(userProfileImage);
-//                            JSONObject jsonPost = jsonObject.getJSONObject("posts");
-//                            UserProfileClass userProfileClass=null;
-//                            if(jsonPost!=null)
-//                            {
-//                                userProfileClass= new UserProfileClass(jsonObject);
-//                                userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
-//                                userProfileAdapter.notifyDataSetChanged();
-//                            }
-//                            userProfileAdapter.notifyDataSetChanged();
-////
+                            followCnt.setText(jsonObject.getString("followerCnt"));
+                            followingCnt.setText(jsonObject.getString("followingCnt"));
+                            portfolioCnt.setText(jsonObject.getString("portfolioCnt"));
+                            bluePrintCnt.setText(jsonObject.getString("blueprintCnt"));
+                            nextPageUrl=jsonObject.getString("nextPage");
+                            userName.setText(jsonObject.getJSONObject("user").getString("user_name"));
+
+                            Glide.with(getApplicationContext()).load("https://archsqr.in/" + jsonObject.getJSONObject("user").getString("profile"))
+                                    .into(userProfileImage);
+                            JSONObject jsonPost = jsonObject.getJSONObject("posts");
+                            UserProfileClass userProfileClass=null;
+                            if(jsonPost!=null)
+                            {
+                                userProfileClass= new UserProfileClass(jsonObject);
+                                userProfileClassArrayList.addAll(userProfileClass.getPostDataClassArrayList());
+                                userProfileAdapter.notifyDataSetChanged();
+                            }
+                            userProfileAdapter.notifyDataSetChanged();
+//
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

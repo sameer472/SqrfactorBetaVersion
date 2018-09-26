@@ -59,6 +59,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
             holder.unreadCount.setText(chatFriend.getUnread_count());
             holder.unreadCount.setVisibility(View.VISIBLE);
         }
+        else {
+            //holder.unreadCount.setText(chatFriend.getUnread_count());
+            holder.unreadCount.setVisibility(View.GONE);
+        }
 //        holder.unreadCount.setText(chatFriend.getUnread_count()+"");
 //        holder.unreadCount.setVisibility(View.VISIBLE);
 

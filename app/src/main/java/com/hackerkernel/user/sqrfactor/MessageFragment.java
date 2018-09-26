@@ -1,10 +1,12 @@
 package com.hackerkernel.user.sqrfactor;
 
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -49,6 +51,7 @@ public class MessageFragment extends Fragment {
     private ArrayList<ChatFriends> chatFriends = new ArrayList<>();
     //private ArrayList<ChatFriends> chatFriends = new ArrayList<>();
     private ChatAdapter chatAdapter;
+    private Context context;
     RecyclerView recycler;
     LinearLayoutManager layoutManager;
     public static String userProfile,userName;
@@ -61,6 +64,13 @@ public class MessageFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+         context = getActivity();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -87,8 +97,8 @@ public class MessageFragment extends Fragment {
 
         if(savedInstanceState==null)
         {
-           getAllFriendsList();
-            HomeScreen.getUnReadMsgCount();
+            getAllFriendsList();
+            //HomeScreen.getUnReadMsgCount();
         }
 
         else {
@@ -99,18 +109,6 @@ public class MessageFragment extends Fragment {
 //            presenceRef.onDisconnect().setValue(isOnline);
             StatusLinstner();
         }
-        ref.child("notification").child(userClass.getUserId()+"").child("all").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                HomeScreen.getnotificationCount();
-
-                }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         ref.child("Chats").child(userClass.getUserId()+"").addValueEventListener(new ValueEventListener() {
             @Override
@@ -127,8 +125,14 @@ public class MessageFragment extends Fragment {
 //                    chatAdapter.notifyItemChanged(index);
 //                }
 
-                getAllFriendsList();
-                HomeScreen.getUnReadMsgCount();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getAllFriendsList();
+
+                    }
+                }, 200);
                 }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -140,36 +144,31 @@ public class MessageFragment extends Fragment {
         return v;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
+        getAllFriendsList();
+        HomeScreen.getUnReadMsgCount();
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getAllFriendsList();
-                HomeScreen.getUnReadMsgCount();
-            }
-        }, 1000);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //getAllFriendsList();
+
+
     }
 
+
     private void getAllFriendsList() {
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
 
         StringRequest myReq = new StringRequest(Request.Method.GET, "https://archsqr.in/api/message/"+userClass.getUserId(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.v("chatfriend1", response);
-                        Toast.makeText(getContext(), response, Toast.LENGTH_LONG).show();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray jsonArrayData = jsonObject.getJSONArray("friends");
